@@ -64,3 +64,12 @@ class MkPlantCardEditor extends LitElement {
 
 customElements.define("mk-plant-card-editor", MkPlantCardEditor);
 export { MkPlantCardEditor };
+
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "mk-plant-card",
+  name: "MK Plant Card",
+  description: "Zaawansowana karta do monitorowania roślin z dziennikiem nawożenia.",
+  preview: true,
+  documentationURL: "https://github.com/KalmarekM/mk-plant-card",
+});

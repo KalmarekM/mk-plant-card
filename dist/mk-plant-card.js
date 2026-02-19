@@ -6,7 +6,7 @@ import{LitElement as e,html as t,css as a}from"https://unpkg.com/lit-element@2.4
         .computeLabel=${e=>e.label}
         @value-changed=${this._valueChanged}
       ></ha-form>
-    `:t``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});const i=a`
+    `:t``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:"Zaawansowana karta do monitorowania roślin z dziennikiem nawożenia.",preview:!0,documentationURL:"https://github.com/KalmarekM/mk-plant-card"});const i=a`
   ha-card { padding: 16px; font-family: 'Roboto', sans-serif; border-radius: 12px; }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }  
   .title { font-weight: bold; font-size: 1.1em; }
