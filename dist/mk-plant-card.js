@@ -1,4 +1,4 @@
-import{LitElement as e,html as t,css as a}from"https://unpkg.com/lit-element@2.4.0/lit-element.js?module";customElements.define("mk-plant-card-editor",class extends e{static get properties(){return{hass:{},_config:{}}}setConfig(e){this._config=e}_schema(){return[{name:"plant_name",label:"Nazwa rośliny",selector:{text:{}}},{name:"image",label:"URL zdjęcia",selector:{text:{}}},{type:"grid",name:"",schema:[{name:"battery_sensor",label:"Sensor baterii",selector:{entity:{domain:"sensor"}}},{name:"moisture_sensor",label:"Wilgotność ziemi",selector:{entity:{domain:"sensor"}}},{name:"temp_sensor",label:"Temperatura",selector:{entity:{domain:"sensor"}}},{name:"humidity_sensor",label:"Wilgotność powietrza",selector:{entity:{domain:"sensor"}}}]},{type:"grid",name:"",schema:[{name:"min_moisture",label:"Min. Wilgotność ziemi",selector:{entity:{domain:"number"}}},{name:"max_moisture",label:"Max. Wilgotność ziemi",selector:{entity:{domain:"number"}}},{name:"min_temp",label:"Min. Temperatura",selector:{entity:{domain:"number"}}},{name:"max_temp",label:"Max. Temperatura",selector:{entity:{domain:"number"}}}]},{name:"details_boolean",label:"Przełącznik szczegółów",selector:{entity:{domain:"input_boolean"}}},{name:"description_sensor",label:"Sensor opisu (atrybut: instrukcja)",selector:{entity:{domain:"sensor"}}},{name:"fertilize_script",label:"Skrypt nawożenia",selector:{entity:{domain:"script"}}},{name:"fertilize_helper",label:"Pomocnik daty nawożenia",selector:{entity:{domain:"input_datetime"}}}]}render(){return this.hass&&this._config?t`
+import{LitElement as e,html as t,css as a}from"https://unpkg.com/lit-element@2.4.0/lit-element.js?module";customElements.define("mk-plant-card-editor",class extends e{static get properties(){return{hass:{},_config:{}}}setConfig(e){this._config=e}_schema(){return[{name:"plant_name",label:"Nazwa rośliny",selector:{text:{}}},{name:"image",label:"URL zdjęcia",selector:{text:{}}},{type:"grid",name:"",schema:[{name:"battery_sensor",label:"Sensor baterii",selector:{entity:{domain:"sensor"}}},{name:"moisture_sensor",label:"Wilgotność ziemi",selector:{entity:{domain:"sensor"}}},{name:"temp_sensor",label:"Temperatura",selector:{entity:{domain:"sensor"}}},{name:"humidity_sensor",label:"Wilgotność powietrza",selector:{entity:{domain:"sensor"}}}]},{type:"grid",name:"",schema:[{name:"min_moisture",label:"Min. Wilgotność ziemi",selector:{entity:{domain:"number"}}},{name:"max_moisture",label:"Max. Wilgotność ziemi",selector:{entity:{domain:"number"}}},{name:"min_temp",label:"Min. Temperatura",selector:{entity:{domain:"number"}}},{name:"max_temp",label:"Max. Temperatura",selector:{entity:{domain:"number"}}}]},{name:"details_boolean",label:"Przełącznik szczegółów",selector:{entity:{domain:"input_boolean"}}},{name:"description_sensor",label:"Sensor opisu (atrybut: instrukcja)",selector:{entity:{domain:"sensor"}}},{name:"fertilize_helper",label:"Pomocnik daty nawożenia",selector:{entity:{domain:"input_datetime"}}}]}render(){return this.hass&&this._config?t`
       <ha-form
         .hass=${this.hass}
         .data=${this._config}
@@ -33,7 +33,7 @@ import{LitElement as e,html as t,css as a}from"https://unpkg.com/lit-element@2.4
   .details-section ha-markdown { display: block; font-size: 0.9em;}
   
   hr { border: 0; border-top: 1px solid var(--divider-color); margin: 10px 0; }
-`;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{}}}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.plant_name)throw new Error("Musisz zdefiniować 'plant_name'");this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:a}=this,i=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),n=parseFloat(this._getState(e.temp_sensor)),o=parseFloat(this._getState(e.humidity_sensor)),r=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),m=parseFloat(this._getState(e.max_temp)),d=parseFloat(this._getState(e.min_humidity)),p=parseFloat(this._getState(e.max_humidity)),h=s<r?"blue":s>l?"red":"green",g=s<r||s>l?"mdi:water-alert":"mdi:water",u=n<c?"mdi:thermometer-low":n>m?"mdi:thermometer-high":"mdi:thermometer",_=n<c||n>m?"red":"green",b=o<d||o>p?"red":"green",f=o<d||o>p?"mdi:water-percent-alert":"mdi:water-percent";return t`
+`;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{}}}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.plant_name)throw new Error("Musisz zdefiniować 'plant_name'");this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:a}=this,i=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),n=parseFloat(this._getState(e.temp_sensor)),o=parseFloat(this._getState(e.humidity_sensor)),r=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),d=parseFloat(this._getState(e.max_temp)),m=parseFloat(this._getState(e.min_humidity)),p=parseFloat(this._getState(e.max_humidity)),h=s<r?"blue":s>l?"red":"green",g=s<r||s>l?"mdi:water-alert":"mdi:water",u=n<c?"mdi:thermometer-low":n>d?"mdi:thermometer-high":"mdi:thermometer",_=n<c||n>d?"red":"green",f=o<m||o>p?"red":"green",b=o<m||o>p?"mdi:water-percent-alert":"mdi:water-percent";return t`
       <ha-card>
         <div class="header">
           <div class="title">🌑 ${e.plant_name} (🔋 ${i}%)</div>
@@ -66,26 +66,26 @@ import{LitElement as e,html as t,css as a}from"https://unpkg.com/lit-element@2.4
                 <span class="p-name">Temperatura</span>
                 <span class="p-state">${n} °C</span>
               </div>
-              <div class="range">### ${c}-${m}°C</div>
+              <div class="range">### ${c}-${d}°C</div>
             </div>
 
             <div class="param-row">
-              <ha-icon icon="${f}" style="color: ${b}"></ha-icon>
+              <ha-icon icon="${b}" style="color: ${f}"></ha-icon>
               <div class="param-text">
                 <span class="p-name">Wilgotność powietrza</span>
                 <span class="p-state">${o} %</span>
               </div>
-              <div class="range">### ${d}-${p}%</div>
+              <div class="range">### ${m}-${p}%</div>
             </div>
           </div>
         </div>
 
-        <div class="fertilize-btn" @click="${()=>this._callScript(e.fertilize_script,e.fertilize_helper)}">
-           <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
-           <div class="btn-text">
-             <span class="btn-primary">Zapisz nawożenie</span>
-             <span class="btn-secondary">Ostatnio: ${this._getState(e.fertilize_helper)}</span>
-           </div>
+        <div class="fertilize-btn" @click="${()=>this._callScript(e.fertilize_helper)}">
+          <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
+          <div class="btn-text">
+            <span class="btn-primary">Zapisz nawożenie</span>
+            <span class="btn-secondary">Ostatnio: ${this._getState(e.fertilize_helper)}</span>
+          </div>
         </div>
 
         ${"on"===a.states[e.details_boolean]?.state?t`
@@ -97,4 +97,4 @@ import{LitElement as e,html as t,css as a}from"https://unpkg.com/lit-element@2.4
           </div>
         `:""}
       </ha-card>
-    `}_toggleDetails(e){this.hass.callService("input_boolean","toggle",{entity_id:e})}_handleMoreInfo(e){const t=new Event("hass-more-info",{bubbles:!0,composed:!0});t.detail={entityId:e},this.dispatchEvent(t)}_callScript(e,t){confirm("Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?")&&this.hass.callService("script","turn_on",{entity_id:e,variables:{pomocnik:t}})}static get styles(){return i}});
+    `}_toggleDetails(e){this.hass.callService("input_boolean","toggle",{entity_id:e})}_handleMoreInfo(e){const t=new Event("hass-more-info",{bubbles:!0,composed:!0});t.detail={entityId:e},this.dispatchEvent(t)}_callScript(e){if(e){if(confirm("Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?")){const t=new Date,a=t.getFullYear(),i=String(t.getMonth()+1).padStart(2,"0"),s=String(t.getDate()).padStart(2,"0");this.hass.callService("input_datetime","set_datetime",{entity_id:e,date:`${a}-${i}-${s}`})}}else alert("Błąd: Nie skonfigurowano pomocnika daty nawożenia!")}static get styles(){return i}});
