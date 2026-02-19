@@ -1,0 +1,164 @@
+import { LitElement, html} from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
+import './editor.js';
+import { cardStyles } from './styles.js'; // Import styli
+
+class MkPlantCard extends LitElement {
+  static get properties() {
+    return {
+      hass: {},
+      config: {}
+    };
+  }
+
+  static getConfigElement() {
+    return document.createElement("mk-plant-card-editor");
+  }
+
+  setConfig(config) {
+    if (!config.plant_name) {
+      throw new Error("Musisz zdefiniować 'plant_name'");
+    }
+    this.config = config;
+  }
+
+  _getState(entity) {
+    return this.hass.states[entity] ? this.hass.states[entity].state : '—';
+  }
+
+  render() {
+    const { config, hass } = this;
+
+    // Pobranie stanów
+    const battery = this._getState(config.battery_sensor);
+    const moisture = parseFloat(this._getState(config.moisture_sensor));
+    const temp = parseFloat(this._getState(config.temp_sensor));
+    const humidity = parseFloat(this._getState(config.humidity_sensor));
+
+    // Pobranie progów (z pomocników number)
+    const minM = parseFloat(this._getState(config.min_moisture));
+    const maxM = parseFloat(this._getState(config.max_moisture));
+    const minT = parseFloat(this._getState(config.min_temp));
+    const maxT = parseFloat(this._getState(config.max_temp));
+    const minH = parseFloat(this._getState(config.min_humidity));
+    const maxH = parseFloat(this._getState(config.max_humidity));
+
+    // Logika ikon i kolorów (Twoja oryginalna logika)
+    const mColor = moisture < minM ? "blue" : (moisture > maxM ? "red" : "green");
+    const mIcon = (moisture < minM || moisture > maxM) ? "mdi:water-alert" : "mdi:water";
+
+    const tIcon = temp < minT ? "mdi:thermometer-low" : (temp > maxT ? "mdi:thermometer-high" : "mdi:thermometer");
+    const tColor = (temp < minT || temp > maxT) ? "red" : "green";
+
+    const hColor = (humidity < minH || humidity > maxH) ? "red" : "green";
+    const hIcon = (humidity < minH || humidity > maxH) ? "mdi:water-percent-alert" : "mdi:water-percent";
+
+    return html`
+      <ha-card>
+        <div class="header">
+          <div class="title">🌑 ${config.plant_name} (🔋 ${battery}%)</div>
+          <ha-icon 
+            icon="${hass.states[config.details_boolean]?.state === 'on' ? 'mdi:information' : 'mdi:information-outline'}" 
+            class="info-icon"
+            style="color: ${hass.states[config.details_boolean]?.state === 'on' ? 'green' : 'grey'}"
+            @click="${() => this._toggleDetails(config.details_boolean)}">
+          </ha-icon>
+        </div>
+
+        <div class="main-container">
+          <div class="image-col" @click="${() => this._handleMoreInfo(config.moisture_sensor)}">
+            <img src="${config.image}">
+          </div>
+
+          <div class="data-col">
+            <div class="param-row">
+              <ha-icon icon="${mIcon}" style="color: ${mColor}"></ha-icon>
+              <div class="param-text">
+                <span class="p-name">Wilgotność ziemi</span>
+                <span class="p-state">${moisture} %</span>
+              </div>
+              <div class="range">### ${minM}-${maxM}%</div>
+            </div>
+
+            <div class="param-row">
+              <ha-icon icon="${tIcon}" style="color: ${tColor}"></ha-icon>
+              <div class="param-text">
+                <span class="p-name">Temperatura</span>
+                <span class="p-state">${temp} °C</span>
+              </div>
+              <div class="range">### ${minT}-${maxT}°C</div>
+            </div>
+
+            <div class="param-row">
+              <ha-icon icon="${hIcon}" style="color: ${hColor}"></ha-icon>
+              <div class="param-text">
+                <span class="p-name">Wilgotność powietrza</span>
+                <span class="p-state">${humidity} %</span>
+              </div>
+              <div class="range">### ${minH}-${maxH}%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fertilize-btn" @click="${() => this._callScript(config.fertilize_script, config.fertilize_helper)}">
+           <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
+           <div class="btn-text">
+             <span class="btn-primary">Zapisz nawożenie</span>
+             <span class="btn-secondary">Ostatnio: ${this._getState(config.fertilize_helper)}</span>
+           </div>
+        </div>
+
+        ${hass.states[config.details_boolean]?.state === 'on' ? html`
+          <div class="details-section">
+            <hr>
+            <ha-markdown
+              .content=${hass.states[config.description_sensor]?.attributes.instrukcja || 'Brak opisu'}>
+            </ha-markdown>
+          </div>
+        ` : ''}
+      </ha-card>
+    `;
+  }
+
+  _toggleDetails(entityId) {
+    this.hass.callService("input_boolean", "toggle", { entity_id: entityId });
+  }
+
+  _handleMoreInfo(entityId) {
+    const e = new Event("hass-more-info", { bubbles: true, composed: true });
+    e.detail = { entityId };
+    this.dispatchEvent(e);
+  }
+/*
+  _callScript(scriptId, helperId) {
+    if (confirm("Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?")) {
+      this.hass.callService("script", "turn_on", { 
+        entity_id: scriptId,
+        variables: { pomocnik: helperId } 
+      });
+    }
+  }
+*/
+  _callScript(helperEntity) {
+    if (!helperEntity) return;
+
+    if (confirm("Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?")) {
+      const now = new Date();
+    
+      // Pobieramy czas lokalny, nie UTC
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+
+      this.hass.callService("input_datetime", "set_datetime", {
+        entity_id: helperEntity,
+        date: `${year}-${month}-${day}`
+      });
+    }
+  }
+  
+  static get styles() {
+    return cardStyles;
+  }
+}
+
+customElements.define("mk-plant-card", MkPlantCard);
