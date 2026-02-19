@@ -99,12 +99,12 @@ class MkPlantCard extends LitElement {
           </div>
         </div>
 
-        <div class="fertilize-btn" @click="${() => this._callScript(config.fertilize_script, config.fertilize_helper)}">
-           <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
-           <div class="btn-text">
-             <span class="btn-primary">Zapisz nawożenie</span>
-             <span class="btn-secondary">Ostatnio: ${this._getState(config.fertilize_helper)}</span>
-           </div>
+        <div class="fertilize-btn" @click="${() => this._callScript(config.fertilize_helper)}">
+          <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
+          <div class="btn-text">
+            <span class="btn-primary">Zapisz nawożenie</span>
+            <span class="btn-secondary">Ostatnio: ${this._getState(config.fertilize_helper)}</span>
+          </div>
         </div>
 
         ${hass.states[config.details_boolean]?.state === 'on' ? html`
@@ -139,7 +139,10 @@ class MkPlantCard extends LitElement {
   }
 */
   _callScript(helperEntity) {
-    if (!helperEntity) return;
+    if (!helperEntity) {
+      alert("Błąd: Nie skonfigurowano pomocnika daty nawożenia!");
+      return;
+    }
 
     if (confirm("Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?")) {
       const now = new Date();
