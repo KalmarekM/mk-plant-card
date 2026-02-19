@@ -2,5 +2,6 @@
   "name": "MK Plant Card",
   "content_type": "plugin",
   "filename": "mk-plant-card.js",
+  "location": "/dist/mk-plant-card.js",
   "render_beta": false
 }
