@@ -9,6 +9,23 @@ class MkPlantCardEditor extends LitElement {
     this._config = config;
   }
 
+  _schemaPrimary() {
+    return [
+        { name: "plant_name", label: "Nazwa rośliny", selector: { text: {} } },
+        { name: "sun_exposure", label: "Nasłonecznienie",
+            selector:{
+                select: {
+                    options: [
+                        { value: "🌑", label: "Cień" },
+                        { value: "⛅", label: "Półcień" },
+                        { value: "☀️", label: "Pełne słońce" }
+                    ]
+                }
+            }
+        },
+    ];
+  }
+
   _schemaImage() {
     return [{ 
       name: "image", 
@@ -20,16 +37,6 @@ class MkPlantCardEditor extends LitElement {
 
   _schemaSensors() {
     return [
-        {name: "sun_exposure",
-        label: "Nasłonecznienie",
-        selector: {
-            options: [
-                { value: "🌑", label: "Cień" },
-                { value: "⛅", label: "Półcień" },
-                { value: "☀️", label: "Pełne słońce" }
-            ]
-        }},
-        { name: "plant_name", label: "Nazwa rośliny", selector: { text: {} } },
         { name: "battery_sensor", label: "Sensor baterii", selector: { entity: { domain: "sensor" } } },
         { name: "moisture_sensor", label: "Wilgotność ziemi", selector: { entity: { domain: "sensor" } } },
         { name: "temp_sensor", label: "Temperatura", selector: { entity: { domain: "sensor" } } },
@@ -60,6 +67,14 @@ class MkPlantCardEditor extends LitElement {
 
     return html`
       <div class="card-config">
+        <ha-form
+          .hass=${this.hass}
+          .data=${this._config}
+          .schema=${this._schemaPrimary()}
+          .computeLabel=${(s) => s.label}
+          @value-changed=${this._valueChanged}
+        ></ha-form>
+
         <ha-form
           .hass=${this.hass}
           .data=${this._config}
