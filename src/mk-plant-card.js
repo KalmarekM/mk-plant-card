@@ -6,10 +6,15 @@ class MkPlantCard extends LitElement {
   static get properties() {
     return {
       hass: {},
-      config: {}
+      config: {},
+      _showDetails: { type: Boolean } // To jest nasz wewnętrzny przełącznik
     };
   }
-
+  
+  constructor() {
+    super();
+    this._showDetails = false; // Domyślnie szczegóły są ukryte
+  }
   static getConfigElement() {
     return document.createElement("mk-plant-card-editor");
   }
@@ -57,11 +62,11 @@ class MkPlantCard extends LitElement {
         <div class="header">
           <div class="title">🌑 ${config.plant_name} (🔋 ${battery}%)</div>
           <ha-icon 
-            icon="${hass.states[config.details_boolean]?.state === 'on' ? 'mdi:information' : 'mdi:information-outline'}" 
+            icon="${this._showDetails ? 'mdi:information' : 'mdi:information-outline'}" 
             class="info-icon"
-            style="color: ${hass.states[config.details_boolean]?.state === 'on' ? 'green' : 'grey'}"
-            @click="${() => this._toggleDetails(config.details_boolean)}">
-          </ha-icon>
+            style="color: ${this._showDetails ? 'green' : 'grey'}"
+            @click="${() => this._toggleDetails()}">
+          </ha-icon>        
         </div>
 
         <div class="main-container">
@@ -107,7 +112,7 @@ class MkPlantCard extends LitElement {
           </div>
         </div>
 
-        ${hass.states[config.details_boolean]?.state === 'on' ? html`
+        ${this._showDetails ? html`
           <div class="details-section">
             <hr>
             <ha-markdown
@@ -119,8 +124,8 @@ class MkPlantCard extends LitElement {
     `;
   }
 
-  _toggleDetails(entityId) {
-    this.hass.callService("input_boolean", "toggle", { entity_id: entityId });
+  _toggleDetails() {
+    this._showDetails = !this._showDetails;
   }
 
   _handleMoreInfo(entityId) {
@@ -128,16 +133,6 @@ class MkPlantCard extends LitElement {
     e.detail = { entityId };
     this.dispatchEvent(e);
   }
-/*
-  _callScript(scriptId, helperId) {
-    if (confirm("Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?")) {
-      this.hass.callService("script", "turn_on", { 
-        entity_id: scriptId,
-        variables: { pomocnik: helperId } 
-      });
-    }
-  }
-*/
   _callScript(helperEntity) {
     if (!helperEntity) {
       alert("Błąd: Nie skonfigurowano pomocnika daty nawożenia!");

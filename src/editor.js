@@ -33,9 +33,7 @@ class MkPlantCardEditor extends LitElement {
           { name: "max_temp", label: "Max. Temperatura", selector: { entity: { domain: "number" } } },
         ],
       },
-      { name: "details_boolean", label: "Przełącznik szczegółów", selector: { entity: { domain: "input_boolean" } } },
       { name: "description_sensor", label: "Sensor opisu (atrybut: instrukcja)", selector: { entity: { domain: "sensor" } } },
-//      { name: "fertilize_script", label: "Skrypt nawożenia", selector: { entity: { domain: "script" } } },
       { name: "fertilize_helper", label: "Pomocnik daty nawożenia", selector: { entity: { domain: "input_datetime" } } },
     ];
   }
