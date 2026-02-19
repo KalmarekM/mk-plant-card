@@ -21,13 +21,14 @@ class MkPlantCard extends LitElement {
   }
 
   setConfig(config) {
-    this.config =  {
-      sun_exposure: "🌑"
-    }
     if (!config.plant_name) {
       throw new Error("Musisz zdefiniować 'plant_name'");
     }
-    this.config = config;
+    this.config =  {
+      sun_exposure: "🌑",
+      image: "",
+      ...config
+    }
   }
 
   _getState(entity) {

@@ -29,11 +29,11 @@ class MkPlantCardEditor extends LitElement {
                 { value: "☀️", label: "Pełne słońce" }
             ]
         }},
-      { name: "plant_name", label: "Nazwa rośliny", selector: { text: {} } },
-      { name: "battery_sensor", label: "Sensor baterii", selector: { entity: { domain: "sensor" } } },
-      { name: "moisture_sensor", label: "Wilgotność ziemi", selector: { entity: { domain: "sensor" } } },
-      { name: "temp_sensor", label: "Temperatura", selector: { entity: { domain: "sensor" } } },
-      { name: "humidity_sensor", label: "Wilgotność powietrza", selector: { entity: { domain: "sensor" } } },
+        { name: "plant_name", label: "Nazwa rośliny", selector: { text: {} } },
+        { name: "battery_sensor", label: "Sensor baterii", selector: { entity: { domain: "sensor" } } },
+        { name: "moisture_sensor", label: "Wilgotność ziemi", selector: { entity: { domain: "sensor" } } },
+        { name: "temp_sensor", label: "Temperatura", selector: { entity: { domain: "sensor" } } },
+        { name: "humidity_sensor", label: "Wilgotność powietrza", selector: { entity: { domain: "sensor" } } },
     ];
   }
 
