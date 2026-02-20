@@ -1,6 +1,7 @@
 import { LitElement, html} from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import './editor.js';
 import { cardStyles } from './styles.js';
+import { translations } from './translations.js';
 
 class MkPlantCard extends LitElement {
   static get properties() {
@@ -14,6 +15,12 @@ class MkPlantCard extends LitElement {
   constructor() {
     super();
     this._showDetails = false;
+  }
+
+  /* Funkcja pomocnicza do pobierania tłumaczeń */
+  t(key) {
+    const lang = this.hass.language || 'en';
+    return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
   }
 
   static getConfigElement() {
@@ -31,18 +38,21 @@ class MkPlantCard extends LitElement {
     }
   }
 
+  /* Pobieranie stanu encji - zwraca stan lub kreskę, jeśli encja nie istnieje */
   _getState(entity) {
     return this.hass.states[entity] ? this.hass.states[entity].state : '—';
   }
 
-  render() {
+render() {
     const { config, hass } = this;
 
+    /* Pobieranie wartości z sensorów */
     const battery = this._getState(config.battery_sensor);
     const moisture = parseFloat(this._getState(config.moisture_sensor));
     const temp = parseFloat(this._getState(config.temp_sensor));
     const humidity = parseFloat(this._getState(config.humidity_sensor));
 
+    /* Pobieranie wartości progowych (zakresów) */
     const minM = parseFloat(this._getState(config.min_moisture));
     const maxM = parseFloat(this._getState(config.max_moisture));
     const minT = parseFloat(this._getState(config.min_temp));
@@ -50,6 +60,7 @@ class MkPlantCard extends LitElement {
     const minH = parseFloat(this._getState(config.min_humidity));
     const maxH = parseFloat(this._getState(config.max_humidity));
 
+    /* Logika kolorów i ikon dla parametrów */
     const mColor = moisture < minM ? "blue" : (moisture > maxM ? "red" : "green");
     const mIcon = (moisture < minM || moisture > maxM) ? "mdi:water-alert" : "mdi:water";
     const tIcon = temp < minT ? "mdi:thermometer-low" : (temp > maxT ? "mdi:thermometer-high" : "mdi:thermometer");
@@ -83,54 +94,52 @@ class MkPlantCard extends LitElement {
           <div class="data-col">
 
             <!-- Sekcja z instrukcją pielęgnacji, widoczna po kliknięciu ikony informacji -->
-            <div class="param-row">
             ${this._showDetails ? html`
               <div class="details-section">
                 <hr>
                 <ha-markdown
-                  .content=${hass.states[config.description_sensor]?.attributes.instrukcja || 'Brak opisu'}>
+                  .content=${hass.states[config.description_sensor]?.attributes.instrukcja || this.t('no_description')}>
                 </ha-markdown>
               </div>
               ` : ''
             }
-            </div>
             
-            <!-- Sekcja z instrukcją pielęgnacji, widoczna po kliknięciu ikony informacji -->
+            <!-- Parametr wilgotności ziemi -->
             <div class="param-row">
               <ha-icon icon="${mIcon}" style="color: ${mColor}"></ha-icon>
               <div class="param-text">
-                <span class="p-name">Wilgotność ziemi</span>
+                <span class="p-name">${this.t('soil_moisture')}</span>
                 <span class="p-state">${moisture} %</span>
               </div>
-              <div class="range">Zakres: ${minM}-${maxM}%</div>
+              <div class="range">${this.t('range')}: ${minM} - ${maxM}%</div>
             </div>
             
             <!-- Parametr temperatury -->
             <div class="param-row">
               <ha-icon icon="${tIcon}" style="color: ${tColor}"></ha-icon>
               <div class="param-text">
-                <span class="p-name">Temperatura</span>
+                <span class="p-name">${this.t('temperature')}</span>
                 <span class="p-state">${temp} °C</span>
               </div>
-              <div class="range">Zakres: ${minT}-${maxT}°C</div>
+              <div class="range">${this.t('range')}: ${minT} - ${maxT}°C</div>
             </div>
 
             <!-- Parametr wilgotności powietrza -->
             <div class="param-row">
               <ha-icon icon="${hIcon}" style="color: ${hColor}"></ha-icon>
               <div class="param-text">
-                <span class="p-name">Wilgotność powietrza</span>
+                <span class="p-name">${this.t('air_humidity')}</span>
                 <span class="p-state">${humidity} %</span>
               </div>
-              <div class="range">Zakres: ${minH}-${maxH}%</div>
+              <div class="range">${this.t('range')}: ${minH} - ${maxH}%</div>
             </div>
 
             <!-- Przycisk do zapisywania daty nawożenia -->
             <div class="fertilize-btn" style="margin-top: 10px;" @click="${() => this._callScript(config.fertilize_helper)}">
               <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
               <div class="btn-text">
-                <span class="btn-primary">Zapisz nawożenie</span>
-                <span class="btn-secondary">Ostatnio: ${this._getState(config.fertilize_helper)}</span>
+                <span class="btn-primary">${this.t('save_fertilize')}</span>
+                <span class="btn-secondary">${this.t('last_time')}: ${this._getState(config.fertilize_helper)}</span>
               </div>
             </div>
           </div>
@@ -140,22 +149,25 @@ class MkPlantCard extends LitElement {
     `;
   }
 
+  /* Przełączanie widoczności sekcji szczegółów */
   _toggleDetails() {
     this._showDetails = !this._showDetails;
   }
 
+  /* Otwieranie standardowego okna dialogowego "więcej informacji" Home Assistant */
   _handleMoreInfo(entityId) {
     const e = new Event("hass-more-info", { bubbles: true, composed: true });
     e.detail = { entityId };
     this.dispatchEvent(e);
   }
 
+  /* Obsługa zapisywania daty nawożenia do pomocnika input_datetime */
   _callScript(helperEntity) {
     if (!helperEntity) {
-      alert("Błąd: Nie skonfigurowano pomocnika daty nawożenia!");
+      alert(this.t('error_helper'));
       return;
     }
-    if (confirm("Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?")) {
+    if (confirm(this.t('confirm_fertilize'))) {
       const now = new Date();
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -174,11 +186,11 @@ class MkPlantCard extends LitElement {
 
 customElements.define("mk-plant-card", MkPlantCard);
 
-// Rejestracja w HA dla listy wyboru kart
+/* Rejestracja w HA dla listy wyboru kart */
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: "mk-plant-card",
   name: "MK Plant Card",
-  description: "Karta rośliny z dziennikiem nawożenia",
+  description: translations[document.querySelector('home-assistant')?.hass?.language || 'en']?.card_description || translations['en'].card_description,
   preview: true
 });

@@ -1,8 +1,14 @@
 import { LitElement, html } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
+import { translations } from './translations.js';
 
 class MkPlantCardEditor extends LitElement {
   static get properties() {
     return { hass: {}, _config: {} };
+  }
+
+  t(key) {
+    const lang = this.hass.language || 'en';
+    return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
   }
 
   setConfig(config) {
@@ -11,14 +17,14 @@ class MkPlantCardEditor extends LitElement {
 
   _schemaPrimary() {
     return [
-        { name: "plant_name", label: "Nazwa rośliny", selector: { text: {} } },
-        { name: "sun_exposure", label: "Nasłonecznienie",
+        { name: "plant_name", label: this.t('plant_name'), selector: { text: {} } },
+        { name: "sun_exposure", label: this.t('sun_exposure'),
             selector:{
                 select: {
                     options: [
-                        { value: "🌑", label: "Cień" },
-                        { value: "⛅", label: "Półcień" },
-                        { value: "☀️", label: "Pełne słońce" }
+                        { value: "🌑", label: this.t('shade') },
+                        { value: "⛅", label: this.t('partial_shade') },
+                        { value: "☀️", label: this.t('full_sun') }
                     ]
                 }
             }
@@ -29,36 +35,41 @@ class MkPlantCardEditor extends LitElement {
   _schemaImage() {
     return [{ 
       name: "image", 
-      label: "URL zdjęcia", 
+      label: this.t('image_url'), 
       selector: { text: {} },
-      helper: "np. /local/images/plants/zdjecie.jpg" 
+      helper: this.t('image_helper') 
     }];
   }
 
   _schemaSensors() {
+    const soil = this.t('soil_moisture');
+    const temp = this.t('temp');
+    const hum = this.t('air_hum');
     return [
-        { name: "battery_sensor", label: "Sensor baterii", selector: { entity: { domain: "sensor" } } },
-        { name: "moisture_sensor", label: "Wilgotność ziemi", selector: { entity: { domain: "sensor" } } },
-        { name: "temp_sensor", label: "Temperatura", selector: { entity: { domain: "sensor" } } },
-        { name: "humidity_sensor", label: "Wilgotność powietrza", selector: { entity: { domain: "sensor" } } },
+        { name: "battery_sensor", label: this.t('battery_sensor'), selector: { entity: { domain: "sensor" } } },
+        { name: "moisture_sensor", label: soil, selector: { entity: { domain: "sensor" } } },
+        { name: "temp_sensor", label: temp, selector: { entity: { domain: "sensor" } } },
+        { name: "humidity_sensor", label: hum, selector: { entity: { domain: "sensor" } } },
     ];
   }
 
   _schemaPowerPlant() {
+    const min = this.t('min_prefix');
+    const max = this.t('max_prefix');
     return [
-      { name: "min_moisture", label: "Min. Wilgotność ziemi", selector: { entity: { domain: "number" } } },
-      { name: "max_moisture", label: "Max. Wilgotność ziemi", selector: { entity: { domain: "number" } } },
-      { name: "min_temp", label: "Min. Temperatura", selector: { entity: { domain: "number" } } },
-      { name: "max_temp", label: "Max. Temperatura", selector: { entity: { domain: "number" } } },
-      { name: "min_humidity", label: "Min. Wilgotność powietrza", selector: { entity: { domain: "number" } } },
-      { name: "max_humidity", label: "Max. Wilgotność powietrza", selector: { entity: { domain: "number" } } },
+      { name: "min_moisture", label: `${min} ${this.t('soil_moisture')}`, selector: { entity: { domain: "number" } } },
+      { name: "max_moisture", label: `${max} ${this.t('soil_moisture')}`, selector: { entity: { domain: "number" } } },
+      { name: "min_temp", label: `${min} ${this.t('temp')}`, selector: { entity: { domain: "number" } } },
+      { name: "max_temp", label: `${max} ${this.t('temp')}`, selector: { entity: { domain: "number" } } },
+      { name: "min_humidity", label: `${min} ${this.t('air_hum')}`, selector: { entity: { domain: "number" } } },
+      { name: "max_humidity", label: `${max} ${this.t('air_hum')}`, selector: { entity: { domain: "number" } } },
     ];
   }
 
   _schemaHelpers() {
     return [
-      { name: "description_sensor", label: "Sensor opisu (atrybut: instrukcja)", selector: { entity: { domain: "sensor" } } },
-      { name: "fertilize_helper", label: "Pomocnik daty nawożenia", selector: { entity: { domain: "input_datetime" } } },
+      { name: "description_sensor", label: this.t('desc_sensor'), selector: { entity: { domain: "sensor" } } },
+      { name: "fertilize_helper", label: this.t('fert_helper'), selector: { entity: { domain: "input_datetime" } } },
     ];
   }
 
@@ -83,7 +94,7 @@ class MkPlantCardEditor extends LitElement {
           @value-changed=${this._valueChanged}
         ></ha-form>
 
-        <p style="font-weight: bold; color: var(--primary-color); margin: 15px 0 8px 0;">Sensory rośliny</p>
+        <p style="font-weight: bold; color: var(--primary-color); margin: 15px 0 8px 0;">${this.t('section_sensors')}</p>
         <ha-form
           .hass=${this.hass}
           .data=${this._config}
@@ -93,7 +104,7 @@ class MkPlantCardEditor extends LitElement {
         ></ha-form>
 
         <hr style="border: 0; border-top: 1px solid var(--divider-color); margin: 20px 0;">
-        <p style="font-weight: bold; color: var(--primary-color); margin-bottom: 8px;">Sensory Power Plant</p>
+        <p style="font-weight: bold; color: var(--primary-color); margin-bottom: 8px;">${this.t('section_power')}</p>
         <ha-form
           .hass=${this.hass}
           .data=${this._config}
@@ -103,7 +114,7 @@ class MkPlantCardEditor extends LitElement {
         ></ha-form>
 
         <hr style="border: 0; border-top: 1px solid var(--divider-color); margin: 20px 0;">
-        <p style="font-weight: bold; color: var(--primary-color); margin-bottom: 8px;">Pomocnicy</p>
+        <p style="font-weight: bold; color: var(--primary-color); margin-bottom: 8px;">${this.t('section_helpers')}</p>
         <ha-form
           .hass=${this.hass}
           .data=${this._config}
