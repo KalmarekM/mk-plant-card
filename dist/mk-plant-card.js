@@ -48,6 +48,8 @@ import{LitElement as e,html as a,css as t}from"https://unpkg.com/lit-element@2.4
     `:a``}_valueChanged(e){const a=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(a)}});const i=t`
   ha-card { padding: 16px; font-family: 'Roboto', sans-serif; border-radius: 12px; }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }  
+  
+  /* ---- NAZWA ROŚLINY ---- */
   .title { font-weight: bold; font-size: 18px; }
   .info-icon { cursor: pointer; transition: 0.3s; }
       
@@ -59,20 +61,29 @@ import{LitElement as e,html as a,css as t}from"https://unpkg.com/lit-element@2.4
       
   .param-row { display: flex; align-items: center; gap: 10px; background: var(--secondary-background-color); padding: 6px 10px; border-radius: 8px; }
   .param-text { display: flex; flex-direction: column; flex-grow: 1; }
-  .p-name { font-size: 13px; color: var(--secondary-text-color); }
-  .p-state { font-weight: bold; font-size: 16px; }
-  .range { font-size: 14px; font-weight: bold; white-space: nowrap; }
+  
+  /* ---- CZUJNIKI (WARTOŚCI I NAZWY) ---- */
+  .p-name { font-size: 16px; color: var(--secondary-text-color); }
+  
+  /* --- WARTOŚĆ CZUJNIKA --- */
+  .p-state { font-weight: bold; font-size: 19px; }
+  
+  /* --- WARTOŚCI OD - DO --- */
+  .range { font-size: 19px; font-weight: bold; white-space: nowrap; }
       
+  /* ---- PRZYCISK NAWOŻENIA ---- */
   .fertilize-btn { margin-top: 12px; display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--primary-color); color: white; border-radius: 8px; cursor: pointer; }
   .btn-text { display: flex; flex-direction: column; }
-  .btn-primary { font-weight: bold; font-size: 15px; }
-  .btn-secondary { font-size: 12px; opacity: 0.9; }
+  .btn-primary { font-weight: bold; font-size: 18px; }
+  .btn-secondary { font-size: 15px; opacity: 0.9; }
       
+  
+  /* ---- SEKCJA SZCZEGÓŁÓW ---- */
   .details-section { font-size: 16px; line-height: 1.6; color: var(--primary-text-color); }
   .details-section ha-markdown { display: block; font-size: 16px;}
   
   hr { border: 0; border-top: 1px solid var(--divider-color); margin: 10px 0; }
-`;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}constructor(){super(),this._showDetails=!1}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.plant_name)throw new Error("Musisz zdefiniować 'plant_name'");this.config={sun_exposure:"🌑",image:"",...e}}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:t}=this,i=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),o=parseFloat(this._getState(e.temp_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),r=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),m=parseFloat(this._getState(e.max_temp)),d=parseFloat(this._getState(e.min_humidity)),p=parseFloat(this._getState(e.max_humidity)),h=s<r?"blue":s>l?"red":"green",g=s<r||s>l?"mdi:water-alert":"mdi:water",u=o<c?"mdi:thermometer-low":o>m?"mdi:thermometer-high":"mdi:thermometer",_=o<c||o>m?"red":"green",f=n<d||n>p?"red":"green",b=n<d||n>p?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return a`
+`;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}constructor(){super(),this._showDetails=!1}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.plant_name)throw new Error("Musisz zdefiniować nazwę rośliny (plant_name)!");this.config={sun_exposure:"🌑",image:"",...e}}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:t}=this,i=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),o=parseFloat(this._getState(e.temp_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),r=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),m=parseFloat(this._getState(e.max_temp)),d=parseFloat(this._getState(e.min_humidity)),p=parseFloat(this._getState(e.max_humidity)),h=s<r?"blue":s>l?"red":"green",g=s<r||s>l?"mdi:water-alert":"mdi:water",u=o<c?"mdi:thermometer-low":o>m?"mdi:thermometer-high":"mdi:thermometer",_=o<c||o>m?"red":"green",f=n<d||n>p?"red":"green",b=n<d||n>p?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return a`
       <ha-card>
       <!-- Nagłówek z nazwą rośliny, ikoną słońca i poziomem baterii -->
         <div class="header">
@@ -114,7 +125,7 @@ import{LitElement as e,html as a,css as t}from"https://unpkg.com/lit-element@2.4
                 <span class="p-name">Wilgotność ziemi</span>
                 <span class="p-state">${s} %</span>
               </div>
-              <div class="range">### ${r}-${l}%</div>
+              <div class="range">Zakres: ${r}-${l}%</div>
             </div>
             
             <!-- Parametr temperatury -->
@@ -124,7 +135,7 @@ import{LitElement as e,html as a,css as t}from"https://unpkg.com/lit-element@2.4
                 <span class="p-name">Temperatura</span>
                 <span class="p-state">${o} °C</span>
               </div>
-              <div class="range">### ${c}-${m}°C</div>
+              <div class="range">Zakres: ${c}-${m}°C</div>
             </div>
 
             <!-- Parametr wilgotności powietrza -->
@@ -134,7 +145,7 @@ import{LitElement as e,html as a,css as t}from"https://unpkg.com/lit-element@2.4
                 <span class="p-name">Wilgotność powietrza</span>
                 <span class="p-state">${n} %</span>
               </div>
-              <div class="range">### ${d}-${p}%</div>
+              <div class="range">Zakres: ${d}-${p}%</div>
             </div>
 
             <!-- Przycisk do zapisywania daty nawożenia -->
@@ -148,16 +159,5 @@ import{LitElement as e,html as a,css as t}from"https://unpkg.com/lit-element@2.4
           </div>
         </div>
 
-        <!-- Sekcja z instrukcją pielęgnacji, widoczna po kliknięciu ikony informacji -->
-
-        ${this._showDetails?a`
-          <div class="details-section">
-            <hr>
-            <ha-markdown
-              .content=${t.states[e.description_sensor]?.attributes.instrukcja||"Brak opisu"}>
-            </ha-markdown>
-          </div>
-          `:""}
-
-        </ha-card>
+      </ha-card>
     `}_toggleDetails(){this._showDetails=!this._showDetails}_handleMoreInfo(e){const a=new Event("hass-more-info",{bubbles:!0,composed:!0});a.detail={entityId:e},this.dispatchEvent(a)}_callScript(e){if(e){if(confirm("Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?")){const a=new Date,t=a.getFullYear(),i=String(a.getMonth()+1).padStart(2,"0"),s=String(a.getDate()).padStart(2,"0");this.hass.callService("input_datetime","set_datetime",{entity_id:e,date:`${t}-${i}-${s}`})}}else alert("Błąd: Nie skonfigurowano pomocnika daty nawożenia!")}static get styles(){return i}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:"Karta rośliny z dziennikiem nawożenia",preview:!0});

@@ -3,6 +3,8 @@ import { css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 export const cardStyles = css`
   ha-card { padding: 16px; font-family: 'Roboto', sans-serif; border-radius: 12px; }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }  
+  
+  /* ---- NAZWA ROŚLINY ---- */
   .title { font-weight: bold; font-size: 18px; }
   .info-icon { cursor: pointer; transition: 0.3s; }
       
@@ -14,15 +16,24 @@ export const cardStyles = css`
       
   .param-row { display: flex; align-items: center; gap: 10px; background: var(--secondary-background-color); padding: 6px 10px; border-radius: 8px; }
   .param-text { display: flex; flex-direction: column; flex-grow: 1; }
-  .p-name { font-size: 13px; color: var(--secondary-text-color); }
-  .p-state { font-weight: bold; font-size: 16px; }
-  .range { font-size: 14px; font-weight: bold; white-space: nowrap; }
+  
+  /* ---- CZUJNIKI (WARTOŚCI I NAZWY) ---- */
+  .p-name { font-size: 16px; color: var(--secondary-text-color); }
+  
+  /* --- WARTOŚĆ CZUJNIKA --- */
+  .p-state { font-weight: bold; font-size: 19px; }
+  
+  /* --- WARTOŚCI OD - DO --- */
+  .range { font-size: 19px; font-weight: bold; white-space: nowrap; }
       
+  /* ---- PRZYCISK NAWOŻENIA ---- */
   .fertilize-btn { margin-top: 12px; display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--primary-color); color: white; border-radius: 8px; cursor: pointer; }
   .btn-text { display: flex; flex-direction: column; }
-  .btn-primary { font-weight: bold; font-size: 15px; }
-  .btn-secondary { font-size: 12px; opacity: 0.9; }
+  .btn-primary { font-weight: bold; font-size: 18px; }
+  .btn-secondary { font-size: 15px; opacity: 0.9; }
       
+  
+  /* ---- SEKCJA SZCZEGÓŁÓW ---- */
   .details-section { font-size: 16px; line-height: 1.6; color: var(--primary-text-color); }
   .details-section ha-markdown { display: block; font-size: 16px;}
   

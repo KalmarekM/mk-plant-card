@@ -22,7 +22,7 @@ class MkPlantCard extends LitElement {
 
   setConfig(config) {
     if (!config.plant_name) {
-      throw new Error("Musisz zdefiniować 'plant_name'");
+      throw new Error("Musisz zdefiniować nazwę rośliny (plant_name)!");
     }
     this.config =  {
       sun_exposure: "🌑",
@@ -102,7 +102,7 @@ class MkPlantCard extends LitElement {
                 <span class="p-name">Wilgotność ziemi</span>
                 <span class="p-state">${moisture} %</span>
               </div>
-              <div class="range">### ${minM}-${maxM}%</div>
+              <div class="range">Zakres: ${minM}-${maxM}%</div>
             </div>
             
             <!-- Parametr temperatury -->
@@ -112,7 +112,7 @@ class MkPlantCard extends LitElement {
                 <span class="p-name">Temperatura</span>
                 <span class="p-state">${temp} °C</span>
               </div>
-              <div class="range">### ${minT}-${maxT}°C</div>
+              <div class="range">Zakres: ${minT}-${maxT}°C</div>
             </div>
 
             <!-- Parametr wilgotności powietrza -->
@@ -122,7 +122,7 @@ class MkPlantCard extends LitElement {
                 <span class="p-name">Wilgotność powietrza</span>
                 <span class="p-state">${humidity} %</span>
               </div>
-              <div class="range">### ${minH}-${maxH}%</div>
+              <div class="range">Zakres: ${minH}-${maxH}%</div>
             </div>
 
             <!-- Przycisk do zapisywania daty nawożenia -->
@@ -136,19 +136,7 @@ class MkPlantCard extends LitElement {
           </div>
         </div>
 
-        <!-- Sekcja z instrukcją pielęgnacji, widoczna po kliknięciu ikony informacji -->
-
-        ${this._showDetails ? html`
-          <div class="details-section">
-            <hr>
-            <ha-markdown
-              .content=${hass.states[config.description_sensor]?.attributes.instrukcja || 'Brak opisu'}>
-            </ha-markdown>
-          </div>
-          ` : ''
-        }
-
-        </ha-card>
+      </ha-card>
     `;
   }
 
