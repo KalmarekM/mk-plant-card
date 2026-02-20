@@ -20,7 +20,7 @@ export default {
         toplevel: true, // Skraca nazwy zmiennych
         reserved: [
           'setConfig',
-          'render',
+          'render', 
           'getProperties',
           'getStubConfig', 
           'getConfigElement', 

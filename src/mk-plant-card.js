@@ -61,6 +61,7 @@ class MkPlantCard extends LitElement {
 
     return html`
       <ha-card>
+      <!-- Nagłówek z nazwą rośliny, ikoną słońca i poziomem baterii -->
         <div class="header">
           <div class="title">${sunIcon} ${config.plant_name} (🔋 ${battery}%)</div>
           <ha-icon 
@@ -70,13 +71,31 @@ class MkPlantCard extends LitElement {
             @click="${() => this._toggleDetails()}">
           </ha-icon>        
         </div>
-
+        
         <div class="main-container">
+        
+          <!-- Kolumna z obrazkiem rośliny, kliknięcie otwiera więcej informacji o wilgotności -->
           <div class="image-col" @click="${() => this._handleMoreInfo(config.moisture_sensor)}">
             <img src="${config.image}">
           </div>
 
+          <!-- Parametry rośliny: wilgotność, temperatura, wilgotność powietrza -->
           <div class="data-col">
+
+            <!-- Sekcja z instrukcją pielęgnacji, widoczna po kliknięciu ikony informacji -->
+            <div class="param-row">
+            ${this._showDetails ? html`
+              <div class="details-section">
+                <hr>
+                <ha-markdown
+                  .content=${hass.states[config.description_sensor]?.attributes.instrukcja || 'Brak opisu'}>
+                </ha-markdown>
+              </div>
+              ` : ''
+            }
+            </div>
+            
+            <!-- Sekcja z instrukcją pielęgnacji, widoczna po kliknięciu ikony informacji -->
             <div class="param-row">
               <ha-icon icon="${mIcon}" style="color: ${mColor}"></ha-icon>
               <div class="param-text">
@@ -85,7 +104,8 @@ class MkPlantCard extends LitElement {
               </div>
               <div class="range">### ${minM}-${maxM}%</div>
             </div>
-
+            
+            <!-- Parametr temperatury -->
             <div class="param-row">
               <ha-icon icon="${tIcon}" style="color: ${tColor}"></ha-icon>
               <div class="param-text">
@@ -95,6 +115,7 @@ class MkPlantCard extends LitElement {
               <div class="range">### ${minT}-${maxT}°C</div>
             </div>
 
+            <!-- Parametr wilgotności powietrza -->
             <div class="param-row">
               <ha-icon icon="${hIcon}" style="color: ${hColor}"></ha-icon>
               <div class="param-text">
@@ -104,6 +125,7 @@ class MkPlantCard extends LitElement {
               <div class="range">### ${minH}-${maxH}%</div>
             </div>
 
+            <!-- Przycisk do zapisywania daty nawożenia -->
             <div class="fertilize-btn" style="margin-top: 10px;" @click="${() => this._callScript(config.fertilize_helper)}">
               <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
               <div class="btn-text">
@@ -114,6 +136,8 @@ class MkPlantCard extends LitElement {
           </div>
         </div>
 
+        <!-- Sekcja z instrukcją pielęgnacji, widoczna po kliknięciu ikony informacji -->
+
         ${this._showDetails ? html`
           <div class="details-section">
             <hr>
@@ -121,8 +145,10 @@ class MkPlantCard extends LitElement {
               .content=${hass.states[config.description_sensor]?.attributes.instrukcja || 'Brak opisu'}>
             </ha-markdown>
           </div>
-        ` : ''}
-      </ha-card>
+          ` : ''
+        }
+
+        </ha-card>
     `;
   }
 
