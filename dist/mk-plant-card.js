@@ -48,7 +48,7 @@ import{LitElement as e,html as a,css as t}from"https://unpkg.com/lit-element@2.4
     `:a``}_valueChanged(e){const a=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(a)}});const i=t`
   ha-card { padding: 16px; font-family: 'Roboto', sans-serif; border-radius: 12px; }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }  
-  .title { font-weight: bold; font-size: 1.1em; }
+  .title { font-weight: bold; font-size: 18px; }
   .info-icon { cursor: pointer; transition: 0.3s; }
       
   .main-container { display: flex; gap: 12px; }
@@ -59,17 +59,17 @@ import{LitElement as e,html as a,css as t}from"https://unpkg.com/lit-element@2.4
       
   .param-row { display: flex; align-items: center; gap: 10px; background: var(--secondary-background-color); padding: 6px 10px; border-radius: 8px; }
   .param-text { display: flex; flex-direction: column; flex-grow: 1; }
-  .p-name { font-size: 0.75em; color: var(--secondary-text-color); }
-  .p-state { font-weight: bold; font-size: 0.9em; }
-  .range { font-size: 0.8em; font-weight: bold; white-space: nowrap; }
+  .p-name { font-size: 13px; color: var(--secondary-text-color); }
+  .p-state { font-weight: bold; font-size: 16px; }
+  .range { font-size: 14px; font-weight: bold; white-space: nowrap; }
       
   .fertilize-btn { margin-top: 12px; display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--primary-color); color: white; border-radius: 8px; cursor: pointer; }
   .btn-text { display: flex; flex-direction: column; }
-  .btn-primary { font-weight: bold; font-size: 0.9em; }
-  .btn-secondary { font-size: 0.7em; opacity: 0.9; }
+  .btn-primary { font-weight: bold; font-size: 15px; }
+  .btn-secondary { font-size: 12px; opacity: 0.9; }
       
-  .details-section { font-size: 0.85em; line-height: 1.4; color: var(--primary-text-color); }
-  .details-section ha-markdown { display: block; font-size: 0.9em;}
+  .details-section { font-size: 16px; line-height: 1.6; color: var(--primary-text-color); }
+  .details-section ha-markdown { display: block; font-size: 16px;}
   
   hr { border: 0; border-top: 1px solid var(--divider-color); margin: 10px 0; }
 `;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}constructor(){super(),this._showDetails=!1}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.plant_name)throw new Error("Musisz zdefiniować 'plant_name'");this.config={sun_exposure:"🌑",image:"",...e}}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:t}=this,i=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),o=parseFloat(this._getState(e.temp_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),r=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),m=parseFloat(this._getState(e.max_temp)),d=parseFloat(this._getState(e.min_humidity)),p=parseFloat(this._getState(e.max_humidity)),h=s<r?"blue":s>l?"red":"green",g=s<r||s>l?"mdi:water-alert":"mdi:water",u=o<c?"mdi:thermometer-low":o>m?"mdi:thermometer-high":"mdi:thermometer",_=o<c||o>m?"red":"green",f=n<d||n>p?"red":"green",b=n<d||n>p?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return a`
