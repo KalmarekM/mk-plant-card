@@ -44,7 +44,8 @@ export const translations = {
     'chip_label_name': 'Etykieta (opcjonalnie)',
     'chip_label_moisture': 'Sensor wilgotności gleby',
     'chip_label_desc_min': 'Sensor progu MIN (atrybut: min)',
-    'chip_label_desc_max': 'Sensor progu MAX (atrybut: max)'
+    'chip_label_desc_max': 'Sensor progu MAX (atrybut: max)',
+    'preview_title': 'Podgląd (jeśli występuje alarm)'
   },
   'en': {
     'section_sensors': 'Plant sensors',
@@ -78,6 +79,7 @@ export const translations = {
     'chip_label_name': 'Label (optional)',
     'chip_label_moisture': 'Soil moisture sensor',
     'chip_label_desc': 'MIN threshold sensor (min attr)',
-    'chip_label_desc_max': 'MAX threshold sensor (max attr)'
+    'chip_label_desc_max': 'MAX threshold sensor (max attr)',
+    'preview_title': 'Preview (if alert is active)'
   }
 };

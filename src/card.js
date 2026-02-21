@@ -5,71 +5,74 @@ import './card-editor.js';
 
 /* --- GŁÓWNA KARTA ROŚLINY --- */
 class MkPlantCard extends LitElement {
-  static get properties() {
-    return {
-      hass: {},
-      config: {},
-      _showDetails: { type: Boolean }
-    };
-  }
-  
-  constructor() {
-    super();
-    this._showDetails = false;
-  }
 
-  t(key) {
-    const lang = this.hass.language || 'en';
-    return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
-  }
-
-  static getConfigElement() {
-    return document.createElement("mk-plant-card-editor");
-  }
-
-setConfig(config) {
-    if (!config.plant_name) {
-      // Pobieramy język z głównego obiektu Home Assistant lub domyślnie 'en'
-      const lang = document.querySelector('home-assistant')?.hass?.language || 'en';
-      
-      // Pobieramy tłumaczenie z pliku translations.js
-      const errorMsg = (translations[lang] && translations[lang]['error_missing_name']) || 
-                       (translations['en']['error_missing_name']);
-      
-      throw new Error(errorMsg);
+    constructor() {
+        super();
+        this._showDetails = false;
     }
-    this.config = config;
-  }
 
-  _getState(entity) {
-    return this.hass.states[entity] ? this.hass.states[entity].state : '—';
-  }
+    static get properties() {
+        return {
+            hass: {},
+            config: {},
+            _showDetails: { type: Boolean }
+        };
+    }
 
-  render() {
-    const { config, hass } = this;
+    static getConfigElement() {
+        return document.createElement("mk-plant-card-editor");
+    }
 
-    const battery = this._getState(config.battery_sensor);
-    const moisture = parseFloat(this._getState(config.moisture_sensor));
-    const temp = parseFloat(this._getState(config.temperature_sensor)); // Poprawione z temp_sensor
-    const humidity = parseFloat(this._getState(config.humidity_sensor));
 
-    const minM = parseFloat(this._getState(config.min_moisture));
-    const maxM = parseFloat(this._getState(config.max_moisture));
-    const minT = parseFloat(this._getState(config.min_temp));
-    const maxT = parseFloat(this._getState(config.max_temp));
-    const minH = parseFloat(this._getState(config.min_humidity));
-    const maxH = parseFloat(this._getState(config.max_humidity));
+    t(key) {
+        const lang = this.hass.language || 'en';
+        return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
+    }
 
-    const mColor = moisture < minM ? "blue" : (moisture > maxM ? "red" : "green");
-    const mIcon = (moisture < minM || moisture > maxM) ? "mdi:water-alert" : "mdi:water";
-    const tIcon = temp < minT ? "mdi:thermometer-low" : (temp > maxT ? "mdi:thermometer-high" : "mdi:thermometer");
-    const tColor = (temp < minT || temp > maxT) ? "red" : "green";
-    const hColor = (humidity < minH || humidity > maxH) ? "red" : "green";
-    const hIcon = (humidity < minH || humidity > maxH) ? "mdi:water-percent-alert" : "mdi:water-percent";
 
-    const sunIcon = config.sun_exposure || "🌑";
+    setConfig(config) {
+        if (!config.plant_name) {
+            // Pobieramy język z głównego obiektu Home Assistant lub domyślnie 'en'
+            const lang = document.querySelector('home-assistant')?.hass?.language || 'en';
 
-    return html`
+            // Pobieramy tłumaczenie z pliku translations.js
+            const errorMsg = (translations[lang] && translations[lang]['error_missing_name']) ||
+                (translations['en']['error_missing_name']);
+
+            throw new Error(errorMsg);
+        }
+        this.config = config;
+    }
+
+    _getState(entity) {
+        return this.hass.states[entity] ? this.hass.states[entity].state : '—';
+    }
+
+    render() {
+        const { config, hass } = this;
+
+        const battery = this._getState(config.battery_sensor);
+        const moisture = parseFloat(this._getState(config.moisture_sensor));
+        const temp = parseFloat(this._getState(config.temperature_sensor));
+        const humidity = parseFloat(this._getState(config.humidity_sensor));
+
+        const minM = parseFloat(this._getState(config.min_moisture));
+        const maxM = parseFloat(this._getState(config.max_moisture));
+        const minT = parseFloat(this._getState(config.min_temp));
+        const maxT = parseFloat(this._getState(config.max_temp));
+        const minH = parseFloat(this._getState(config.min_humidity));
+        const maxH = parseFloat(this._getState(config.max_humidity));
+
+        const mColor = moisture < minM ? "red" : (moisture > maxM ? "blue" : "green");
+        const mIcon = (moisture < minM || moisture > maxM) ? "mdi:water-alert" : "mdi:water";
+        const tColor = (temp < minT ? "blue" : (temp > maxT ? "red" : "green"));
+        const tIcon = temp < minT ? "mdi:thermometer-low" : (temp > maxT ? "mdi:thermometer-high" : "mdi:thermometer");
+        const hColor = (humidity < minH || humidity > maxH) ? "red" : "green";
+        const hIcon = (humidity < minH || humidity > maxH) ? "mdi:water-percent-alert" : "mdi:water-percent";
+
+        const sunIcon = config.sun_exposure || "🌑";
+
+        return html`
       <ha-card>
         <div class="header">
           <div class="title">${sunIcon} ${config.plant_name} (🔋 ${battery}%)</div>
@@ -135,40 +138,40 @@ setConfig(config) {
         </div>
       </ha-card>
     `;
-  }
-
-  _toggleDetails() { this._showDetails = !this._showDetails; }
-
-  _handleMoreInfo(entityId) {
-    const e = new Event("hass-more-info", { bubbles: true, composed: true });
-    e.detail = { entityId };
-    this.dispatchEvent(e);
-  }
-
-  _callScript(helperEntity) {
-    if (!helperEntity) {
-      alert(this.t('error_helper'));
-      return;
     }
-    if (confirm(this.t('confirm_fertilize'))) {
-      const now = new Date();
-      const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      this.hass.callService("input_datetime", "set_datetime", {
-        entity_id: helperEntity,
-        date: dateStr
-      });
+
+    _toggleDetails() { this._showDetails = !this._showDetails; }
+
+    _handleMoreInfo(entityId) {
+        const e = new Event("hass-more-info", { bubbles: true, composed: true });
+        e.detail = { entityId };
+        this.dispatchEvent(e);
     }
-  }
-  
-  static get styles() { return cardStyles; }
+
+    _callScript(helperEntity) {
+        if (!helperEntity) {
+            alert(this.t('error_helper'));
+            return;
+        }
+        if (confirm(this.t('confirm_fertilize'))) {
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            this.hass.callService("input_datetime", "set_datetime", {
+                entity_id: helperEntity,
+                date: dateStr
+            });
+        }
+    }
+
+    static get styles() { return cardStyles; }
 }
 customElements.define("mk-plant-card", MkPlantCard);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: "mk-plant-card",
-  name: "MK Plant Card",
-  description: translations[document.querySelector('home-assistant')?.hass?.language || 'en']?.card_description || translations['en'].card_description,
-  preview: true
+    type: "mk-plant-card",
+    name: "MK Plant Card",
+    description: translations[document.querySelector('home-assistant')?.hass?.language || 'en']?.card_description || translations['en'].card_description,
+    preview: true
 });
 

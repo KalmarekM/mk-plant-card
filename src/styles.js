@@ -39,3 +39,50 @@ export const cardStyles = css`
   
   hr { border: 0; border-top: 1px solid var(--divider-color); margin: 10px 0; }
 `;
+
+export const chipStyles = css`
+  :host {
+    display: inline-block;
+    margin-right: 8px;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    background: var(--card-background-color, #1c1c1c);
+    border-radius: 16px;
+    padding: 4px 10px;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+  }
+  ha-icon {
+    --mdc-icon-size: 18px;
+    margin-right: 4px;
+  }
+  span {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--primary-text-color);
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 var(--glow-color); }
+    70% { box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+  }
+`;
+
+export const editorStyles = css`
+  .card-config {
+    padding: 4px;
+  }
+  .preview-section {
+    margin-top: 20px;
+    border-top: 1px solid var(--divider-color);
+    padding-top: 10px;
+  }
+  .preview-label {
+    font-size: 10px;
+    color: var(--secondary-text-color);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+`;
