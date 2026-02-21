@@ -1,4 +1,5 @@
 import { LitElement, html } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
+import { cardStyles } from './styles.js';
 import { translations } from './translations.js';
 
 class MkPlantCardEditor extends LitElement {
@@ -132,88 +133,4 @@ class MkPlantCardEditor extends LitElement {
     this.dispatchEvent(event);
   }
 }
-
-/* EDYTOR DLA CHIPA ALARMOWEGO */
-class MkPlantAlertChipEditor extends LitElement {
-  static get properties() {
-    return { hass: {}, _config: {} };
-  }
-
-  t(key) {
-    const lang = this.hass.language || 'en';
-    return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
-  }
-
-  setConfig(config) {
-    this._config = config;
-  }
-
-_schema() {
-    return [
-      { name: "name", label: this.t('chip_label_name'), selector: { text: {} } },
-      { name: "entity", label: this.t('chip_label_moisture'), selector: { entity: { domain: "sensor" } } },
-      { name: "description_entity", label: this.t('chip_label_desc_min'), selector: { entity: { domain: "number" } } },
-      { name: "description_max_entity", label: this.t('chip_label_desc_max'), selector: { entity: { domain: "number" } } },
-    ];
-  }
-
-  render() {
-    const { config, hass } = this;
-    const state = hass.states[config.entity];
-    const descMinState = hass.states[config.description_entity];
-    const descMaxState = hass.states[config.description_max_entity];
-
-    // Jeśli brakuje encji, wyświetlamy informację w edytorze zamiast błędu
-    if (!state || !descMinState || !descMaxState) {
-        return html`<div style="color: #444; font-size: 10px; border: 1px dashed #444; padding: 4px; border-radius: 8px;">
-            ${config.name || 'Plant'}: Brak sensorów...
-        </div>`;
-    }
-
-    const currentV = parseFloat(state.state);
-    // Pobieramy wartość bezpośrednio ze stanu (state), bo to domena 'number'
-    const minV = parseFloat(descMinState.state);
-    const maxV = parseFloat(descMaxState.state);
-
-    let isAlert = false;
-    let iconColor = "#ff4444";
-    let glowColor = "rgba(255, 68, 68, 0.5)";
-    let icon = "mdi:water-alert";
-
-    if (currentV < minV) {
-      isAlert = true;
-      iconColor = "#ff4444"; // Czerwony - za sucho
-      glowColor = "rgba(255, 68, 68, 0.5)";
-      icon = "mdi:water-outline";
-    } else if (currentV > maxV) {
-      isAlert = true;
-      iconColor = "#44b4ff"; // Niebieski - za mokro
-      glowColor = "rgba(68, 180, 255, 0.5)";
-      icon = "mdi:water-plus";
-    }
-
-    if (!isAlert) return html``;    
-    
-    return html`
-      <ha-form
-        .hass=${this.hass}
-        .data=${this._config}
-        .schema=${this._schema()}
-        .computeLabel=${(s) => s.label}
-        @value-changed=${this._valueChanged}
-      ></ha-form>
-    `;
-  }
-
-  _valueChanged(ev) {
-    const event = new CustomEvent("config-changed", {
-      detail: { config: ev.detail.value },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
-  }
-}
-
 customElements.define("mk-plant-card-editor", MkPlantCardEditor);
-customElements.define("mk-plant-alert-chip-editor", MkPlantAlertChipEditor);
