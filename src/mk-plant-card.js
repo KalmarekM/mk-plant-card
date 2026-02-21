@@ -178,11 +178,15 @@ class MkPlantAlertChip extends LitElement {
 render() {
     const { config, hass } = this;
     const state = hass.states[config.entity];
+    // Upewnij się, że używasz config.description_entity
     const descMinState = hass.states[config.description_entity];
     const descMaxState = hass.states[config.description_max_entity];
 
-    if (!state || !descMinState || !descMaxState) return html``;
-
+    // Jeśli sensorów nie ma, zwracamy pusty html zamiast błędu (dzięki temu edytor nie "wybucha")
+    if (!state || !descMinState || !descMaxState) {
+        return html`<div style="color: orange; font-size: 10px;">Oczekiwanie na dane...</div>`;
+    }
+    // ... reszta kodu
     const currentV = parseFloat(state.state);
     const minV = parseFloat(descMinState.attributes.min);
     const maxV = parseFloat(descMaxState.attributes.max);
@@ -234,15 +238,24 @@ render() {
     this.dispatchEvent(e);
   }
 
-setConfig(config) {
-  if (!config.entity || !config.description_entity || !config.description_max_entity) {
-    const lang = document.querySelector('home-assistant')?.hass?.language || 'en';
-    const errorMsg = (translations[lang] && translations[lang]['error_missing_sensors']) || 
+  setConfig(config) {
+    if (!config.entity || !config.description_entity || !config.description_max_entity) {
+      const lang = document.querySelector('home-assistant')?.hass?.language || 'en';
+      const errorMsg = (translations[lang] && translations[lang]['error_missing_sensors']) || 
                      (translations['en']['error_missing_sensors']);
-    throw new Error(errorMsg);
+      throw new Error(errorMsg);
+    }
+    this.config = config;
   }
-  this.config = config;
-}
+
+  static getStubConfig() {
+    return {
+      name: "Roślina",
+      entity: "",
+      description_entity: "",
+      description_max_entity: ""
+    };
+  }  
 }
 
 customElements.define("mk-plant-alert-chip", MkPlantAlertChip);

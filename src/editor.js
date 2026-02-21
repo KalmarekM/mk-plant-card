@@ -148,17 +148,52 @@ class MkPlantAlertChipEditor extends LitElement {
     this._config = config;
   }
 
-  _schema() {
+_schema() {
     return [
       { name: "name", label: this.t('chip_label_name'), selector: { text: {} } },
       { name: "entity", label: this.t('chip_label_moisture'), selector: { entity: { domain: "sensor" } } },
-      { name: "description_min_entity", label: this.t('chip_label_desc_min'), selector: { entity: { domain: "number" } } },
+      { name: "description_entity", label: this.t('chip_label_desc_min'), selector: { entity: { domain: "number" } } },
       { name: "description_max_entity", label: this.t('chip_label_desc_max'), selector: { entity: { domain: "number" } } },
     ];
   }
 
   render() {
-    if (!this.hass || !this._config) return html``;
+    const { config, hass } = this;
+    const state = hass.states[config.entity];
+    const descMinState = hass.states[config.description_entity];
+    const descMaxState = hass.states[config.description_max_entity];
+
+    // Jeśli brakuje encji, wyświetlamy informację w edytorze zamiast błędu
+    if (!state || !descMinState || !descMaxState) {
+        return html`<div style="color: #444; font-size: 10px; border: 1px dashed #444; padding: 4px; border-radius: 8px;">
+            ${config.name || 'Plant'}: Brak sensorów...
+        </div>`;
+    }
+
+    const currentV = parseFloat(state.state);
+    // Pobieramy wartość bezpośrednio ze stanu (state), bo to domena 'number'
+    const minV = parseFloat(descMinState.state);
+    const maxV = parseFloat(descMaxState.state);
+
+    let isAlert = false;
+    let iconColor = "#ff4444";
+    let glowColor = "rgba(255, 68, 68, 0.5)";
+    let icon = "mdi:water-alert";
+
+    if (currentV < minV) {
+      isAlert = true;
+      iconColor = "#ff4444"; // Czerwony - za sucho
+      glowColor = "rgba(255, 68, 68, 0.5)";
+      icon = "mdi:water-outline";
+    } else if (currentV > maxV) {
+      isAlert = true;
+      iconColor = "#44b4ff"; // Niebieski - za mokro
+      glowColor = "rgba(68, 180, 255, 0.5)";
+      icon = "mdi:water-plus";
+    }
+
+    if (!isAlert) return html``;    
+    
     return html`
       <ha-form
         .hass=${this.hass}
