@@ -28,13 +28,13 @@ class MkPlantCard extends LitElement {
   }
 
 setConfig(config) {
-    if (!config.entity || !config.description_entity || !config.description_max_entity) {
+    if (!config.plant_name) {
       // Pobieramy język z głównego obiektu Home Assistant lub domyślnie 'en'
       const lang = document.querySelector('home-assistant')?.hass?.language || 'en';
       
       // Pobieramy tłumaczenie z pliku translations.js
-      const errorMsg = (translations[lang] && translations[lang]['error_missing_sensors']) || 
-                       (translations['en']['error_missing_sensors']);
+      const errorMsg = (translations[lang] && translations[lang]['error_missing_name']) || 
+                       (translations['en']['error_missing_name']);
       
       throw new Error(errorMsg);
     }
@@ -234,12 +234,15 @@ render() {
     this.dispatchEvent(e);
   }
 
-  setConfig(config) {
-    if (!config.entity || !config.description_entity) {
-      throw new Error("Musisz zdefiniować entity i description_entity");
-    }
-    this.config = config;
+setConfig(config) {
+  if (!config.entity || !config.description_entity || !config.description_max_entity) {
+    const lang = document.querySelector('home-assistant')?.hass?.language || 'en';
+    const errorMsg = (translations[lang] && translations[lang]['error_missing_sensors']) || 
+                     (translations['en']['error_missing_sensors']);
+    throw new Error(errorMsg);
   }
+  this.config = config;
+}
 }
 
 customElements.define("mk-plant-alert-chip", MkPlantAlertChip);

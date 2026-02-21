@@ -37,6 +37,7 @@ export const translations = {
     // Opisy kart (widoczne przy dodawaniu w HA)
     'card_description': 'Pełna karta rośliny z instrukcją i nawożeniem',
     'chip_description': 'Mały alert (chip) - widoczny tylko gdy roślina wymaga podlewania',
+    'error_missing_name': 'Błąd: Nazwa rośliny jest wymagana!',
     'error_missing_sensors': 'Skonfiguruj wszystkie sensory (Wilgotność, Próg Min, Próg Max)',
     
     // Edytor Chipa
@@ -73,6 +74,7 @@ export const translations = {
     'card_description': 'Full plant card with instructions and fertilization',
     'chip_description': 'Small alert chip - visible only when watering is needed',
     'error_missing_sensors': 'Please configure all sensors (Moisture, Min Threshold, Max Threshold)',
+    'error_missing_name': 'Error: Plant name is required!',
     'chip_label_name': 'Label (optional)',
     'chip_label_moisture': 'Soil moisture sensor',
     'chip_label_desc': 'MIN threshold sensor (min attr)',
