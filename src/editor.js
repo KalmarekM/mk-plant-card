@@ -152,8 +152,8 @@ class MkPlantAlertChipEditor extends LitElement {
     return [
       { name: "name", label: this.t('chip_label_name'), selector: { text: {} } },
       { name: "entity", label: this.t('chip_label_moisture'), selector: { entity: { domain: "sensor" } } },
-      { name: "description_entity", label: this.t('chip_label_desc'), selector: { entity: { domain: "sensor" } } },
-      { name: "description_max_entity", label: this.t('chip_label_desc_max'), selector: { entity: { domain: "sensor" } } },
+      { name: "description_min_entity", label: this.t('chip_label_desc_min'), selector: { entity: { domain: "number" } } },
+      { name: "description_max_entity", label: this.t('chip_label_desc_max'), selector: { entity: { domain: "number" } } },
     ];
   }
 

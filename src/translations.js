@@ -43,7 +43,7 @@ export const translations = {
     // Edytor Chipa
     'chip_label_name': 'Etykieta (opcjonalnie)',
     'chip_label_moisture': 'Sensor wilgotności gleby',
-    'chip_label_desc': 'Sensor progu MIN (atrybut: min)',
+    'chip_label_desc_min': 'Sensor progu MIN (atrybut: min)',
     'chip_label_desc_max': 'Sensor progu MAX (atrybut: max)'
   },
   'en': {
