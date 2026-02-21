@@ -1,4 +1,4 @@
-import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4.0/lit-element.js?module";const s=e`
+import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4.0/lit-element.js?module";const a=e`
   ha-card { padding: 16px; font-family: 'Roboto', sans-serif; border-radius: 12px; }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }  
   
@@ -36,7 +36,7 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
   .details-section ha-markdown { display: block; font-size: 16px;}
   
   hr { border: 0; border-top: 1px solid var(--divider-color); margin: 10px 0; }
-`,a=e`
+`,s=e`
   :host {
     display: inline-block;
     margin-right: 8px;
@@ -126,10 +126,10 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
           @value-changed=${this._valueChanged}
         ></ha-form>
       </div>
-    `:i``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});customElements.define("mk-plant-card",class extends t{constructor(){super(),this._showDetails=!1}static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}static getConfigElement(){return document.createElement("mk-plant-card-editor")}t(e){const t=this.hass.language||"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){if(!e.plant_name){const e=document.querySelector("home-assistant")?.hass?.language||"en",t=r[e]&&r[e].error_missing_name||r.en.error_missing_name;throw new Error(t)}this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:t}=this,s=this._getState(e.battery_sensor),a=parseFloat(this._getState(e.moisture_sensor)),r=parseFloat(this._getState(e.temperature_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),o=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),d=parseFloat(this._getState(e.max_temp)),p=parseFloat(this._getState(e.min_humidity)),h=parseFloat(this._getState(e.max_humidity)),m=a<o?"red":a>l?"blue":"green",_=a<o||a>l?"mdi:water-alert":"mdi:water",u=r<c?"blue":r>d?"red":"green",g=r<c?"mdi:thermometer-low":r>d?"mdi:thermometer-high":"mdi:thermometer",f=n<p||n>h?"red":"green",b=n<p||n>h?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return i`
+    `:i``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});customElements.define("mk-plant-card",class extends t{constructor(){super(),this._showDetails=!1}static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}static getConfigElement(){return document.createElement("mk-plant-card-editor")}t(e){const t=this.hass.language||"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){if(!e.plant_name){const e=document.querySelector("home-assistant")?.hass?.language||"en",t=r[e]&&r[e].error_missing_name||r.en.error_missing_name;throw new Error(t)}this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:t}=this,a=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),r=parseFloat(this._getState(e.temperature_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),o=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),d=parseFloat(this._getState(e.max_temp)),p=parseFloat(this._getState(e.min_humidity)),m=parseFloat(this._getState(e.max_humidity)),h=s<o?"red":s>l?"blue":"green",_=s<o||s>l?"mdi:water-alert":"mdi:water",u=r<c?"blue":r>d?"red":"green",g=r<c?"mdi:thermometer-low":r>d?"mdi:thermometer-high":"mdi:thermometer",f=n<p||n>m?"red":"green",b=n<p||n>m?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return i`
       <ha-card>
         <div class="header">
-          <div class="title">${y} ${e.plant_name} (🔋 ${s}%)</div>
+          <div class="title">${y} ${e.plant_name} (🔋 ${a}%)</div>
           <ha-icon 
             icon="${this._showDetails?"mdi:information":"mdi:information-outline"}" 
             class="info-icon"
@@ -154,10 +154,10 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
               `:""}
             
             <div class="param-row">
-              <ha-icon icon="${_}" style="color: ${m}"></ha-icon>
+              <ha-icon icon="${_}" style="color: ${h}"></ha-icon>
               <div class="param-text">
                 <span class="p-name">${this.t("soil_moisture")}</span>
-                <span class="p-state">${a} %</span>
+                <span class="p-state">${s} %</span>
               </div>
               <div class="range">${this.t("range")}: ${o} - ${l}%</div>
             </div>
@@ -177,7 +177,7 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
                 <span class="p-name">${this.t("air_humidity")}</span>
                 <span class="p-state">${n} %</span>
               </div>
-              <div class="range">${this.t("range")}: ${p} - ${h}%</div>
+              <div class="range">${this.t("range")}: ${p} - ${m}%</div>
             </div>
 
             <div class="fertilize-btn" style="margin-top: 10px;" @click="${()=>this._callScript(e.fertilize_helper)}">
@@ -190,7 +190,7 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
           </div>
         </div>
       </ha-card>
-    `}_toggleDetails(){this._showDetails=!this._showDetails}_handleMoreInfo(e){const t=new Event("hass-more-info",{bubbles:!0,composed:!0});t.detail={entityId:e},this.dispatchEvent(t)}_callScript(e){if(e){if(confirm(this.t("confirm_fertilize"))){const t=new Date,i=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;this.hass.callService("input_datetime","set_datetime",{entity_id:e,date:i})}}else alert(this.t("error_helper"))}static get styles(){return s}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:r[document.querySelector("home-assistant")?.hass?.language||"en"]?.card_description||r.en.card_description,preview:!0});customElements.define("mk-plant-alert-chip-editor",class extends t{static get properties(){return{hass:{},_config:{}}}t(e){const t=this.hass.language||"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){this._config=e}_schema(){return[{name:"name",label:this.t("chip_label_name"),selector:{text:{}}},{name:"entity",label:this.t("chip_label_moisture"),selector:{entity:{domain:"sensor"}}},{name:"description_entity",label:this.t("chip_label_desc_min"),selector:{entity:{domain:"number"}}},{name:"description_max_entity",label:this.t("chip_label_desc_max"),selector:{entity:{domain:"number"}}}]}render(){return this.hass&&this._config?i`
+    `}_toggleDetails(){this._showDetails=!this._showDetails}_handleMoreInfo(e){const t=new Event("hass-more-info",{bubbles:!0,composed:!0});t.detail={entityId:e},this.dispatchEvent(t)}_callScript(e){if(e){if(confirm(this.t("confirm_fertilize"))){const t=new Date,i=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;this.hass.callService("input_datetime","set_datetime",{entity_id:e,date:i})}}else alert(this.t("error_helper"))}static get styles(){return a}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:r[document.querySelector("home-assistant")?.hass?.language||"en"]?.card_description||r.en.card_description,preview:!0});customElements.define("mk-plant-alert-chip-editor",class extends t{static get properties(){return{hass:{},_config:{}}}t(e){const t=this.hass.language||"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){this._config=e}_schema(){return[{name:"name",label:this.t("chip_label_name"),selector:{text:{}}},{name:"entity",label:this.t("chip_label_moisture"),selector:{entity:{domain:"sensor"}}},{name:"description_entity",label:this.t("chip_label_desc_min"),selector:{entity:{domain:"number"}}},{name:"description_max_entity",label:this.t("chip_label_desc_max"),selector:{entity:{domain:"number"}}}]}render(){return this.hass&&this._config?i`
       <div class="card-config">
         <ha-form
           .hass=${this.hass}
@@ -208,11 +208,11 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
           ></mk-plant-alert-chip>
         </div>
       </div>
-    `:i``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});customElements.define("mk-plant-alert-chip",class extends t{static get properties(){return{hass:{},config:{}}}static get styles(){return a}static getConfigElement(){return document.createElement("mk-plant-alert-chip-editor")}t(e){const t=this.hass.language||"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){if(!e.entity||!e.description_entity||!e.description_max_entity)throw new Error(this.t("configure_all_sensors"));this.config=e}static getStubConfig(){return{name:"Roślina",entity:"",description_entity:"",description_max_entity:""}}render(){const{config:e,hass:t}=this,s=t.states[e.entity],a=t.states[e.description_entity],r=t.states[e.description_max_entity];if(!s||!a||!r)return i``;const n=parseFloat(s.state),o=parseFloat(a.state),l=parseFloat(r.state);let c=!1,d="#ff4444",p="rgba(255, 68, 68, 0.5)";return n<o?(c=!0,d="#ff4444"):n>l&&(c=!0,d="#44b4ff",p="rgba(68, 180, 255, 0.5)"),c?i`
+    `:i``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});customElements.define("mk-plant-alert-chip",class extends t{static get properties(){return{hass:{},config:{}}}static get styles(){return s}static getConfigElement(){return document.createElement("mk-plant-alert-chip-editor")}t(e){const t=this.hass.language||"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){if(!e.entity||!e.description_entity||!e.description_max_entity)throw new Error(this.t("configure_all_sensors"));this.config=e}static getStubConfig(){return{name:"Roślina",entity:"",description_entity:"",description_max_entity:""}}render(){const{config:e,hass:t}=this,a=e.entity,s=t.states[e.entity],r=t.states[e.description_entity],n=t.states[e.description_max_entity],o=t.entities[a];let l="";if(o&&o.area_id){const e=t.areas[o.area_id];l=e?e.name:""}if(!l&&o&&o.device_id){const e=t.devices[o.device_id];if(e&&e.area_id){const i=t.areas[e.area_id];l=i?i.name:""}}if(!s||!r||!n)return i``;const c=parseFloat(s.state),d=parseFloat(r.state),p=parseFloat(n.state);let m=!1,h="#ff4444",_="rgba(255, 68, 68, 0.5)";return c<d?(m=!0,h="#ff4444"):c>p&&(m=!0,h="#44b4ff",_="rgba(68, 180, 255, 0.5)"),m?i`
       <div class="chip" 
-           style="border-color: ${d}; --glow-color: ${p};" 
+           style="border-color: ${h}; --glow-color: ${_};" 
            @click="${()=>this._handleMoreInfo()}">
-        <ha-icon icon="mdi:water-alert" style="color: ${d}"></ha-icon>
-        <span>${e.name||s.attributes.friendly_name}</span>
+        <ha-icon icon="mdi:water-alert" style="color: ${h}"></ha-icon>
+        <span>${e.name||s.attributes.friendly_name} (${l})</span>
       </div>
     `:i``}_handleMoreInfo(){const e=new Event("hass-more-info",{bubbles:!0,composed:!0});e.detail={entityId:this.config.entity},this.dispatchEvent(e)}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:r[document.querySelector("home-assistant")?.hass?.language||"en"]?.card_description||r.en.card_description,preview:!0}),window.customCards.push({type:"mk-plant-alert-chip",name:"MK Plant Alert Chip",description:r[document.querySelector("home-assistant")?.hass?.language||"en"]?.chip_description||r.en.chip_description,preview:!0});

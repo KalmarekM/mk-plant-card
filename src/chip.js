@@ -41,9 +41,26 @@ export class MkPlantAlertChip extends LitElement {
 
     render() {
         const { config, hass } = this;
+        const entityId = config.entity;
         const state = hass.states[config.entity];
         const descMinState = hass.states[config.description_entity];
         const descMaxState = hass.states[config.description_max_entity];
+
+        const entityRegistry = hass.entities[entityId];
+        let areaName = "";
+
+        if (entityRegistry && entityRegistry.area_id) {
+            const area = hass.areas[entityRegistry.area_id];
+            areaName = area ? area.name : "";
+        }
+
+        if (!areaName && entityRegistry && entityRegistry.device_id) {
+            const device = hass.devices[entityRegistry.device_id];
+            if (device && device.area_id) {
+                const area = hass.areas[device.area_id];
+                areaName = area ? area.name : "";
+            }
+        }
 
         if (!state || !descMinState || !descMaxState) return html``;
 
@@ -71,7 +88,7 @@ export class MkPlantAlertChip extends LitElement {
            style="border-color: ${iconColor}; --glow-color: ${glowColor};" 
            @click="${() => this._handleMoreInfo()}">
         <ha-icon icon="mdi:water-alert" style="color: ${iconColor}"></ha-icon>
-        <span>${config.name || state.attributes.friendly_name}</span>
+        <span>${config.name || state.attributes.friendly_name} (${areaName})</span>
       </div>
     `;
     }
