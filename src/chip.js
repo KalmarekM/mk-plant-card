@@ -19,7 +19,8 @@ export class MkPlantAlertChip extends LitElement {
     }
 
     t(key) {
-        const lang = this.hass.language || 'en';
+        // Sprawdzamy, czy this.hass w ogóle istnieje
+        const lang = (this.hass && this.hass.language) ? this.hass.language : 'en';
         return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
     }
 
@@ -41,7 +42,10 @@ export class MkPlantAlertChip extends LitElement {
 
     render() {
         const { config, hass } = this;
-        const entityId = config.entity;
+        if (!hass || !config) {
+            return html``;
+        }
+         const entityId = config.entity;
         const state = hass.states[config.entity];
         const descMinState = hass.states[config.description_entity];
         const descMaxState = hass.states[config.description_max_entity];

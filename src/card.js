@@ -25,7 +25,8 @@ class MkPlantCard extends LitElement {
 
 
     t(key) {
-        const lang = this.hass.language || 'en';
+        // Sprawdzamy, czy this.hass w ogóle istnieje
+        const lang = (this.hass && this.hass.language) ? this.hass.language : 'en';
         return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
     }
 
@@ -50,7 +51,9 @@ class MkPlantCard extends LitElement {
 
     render() {
         const { config, hass } = this;
-
+        if (!hass || !config) {
+            return html``;
+        }
         const battery = this._getState(config.battery_sensor);
         const moisture = parseFloat(this._getState(config.moisture_sensor));
         const temp = parseFloat(this._getState(config.temperature_sensor));

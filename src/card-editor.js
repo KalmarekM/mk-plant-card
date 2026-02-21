@@ -8,7 +8,8 @@ class MkPlantCardEditor extends LitElement {
   }
 
   t(key) {
-    const lang = this.hass.language || 'en';
+    // Sprawdzamy, czy this.hass w ogóle istnieje
+    const lang = (this.hass && this.hass.language) ? this.hass.language : 'en';
     return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
   }
 
@@ -18,36 +19,37 @@ class MkPlantCardEditor extends LitElement {
 
   _schemaPrimary() {
     return [
-        { name: "plant_name", label: this.t('plant_name'), selector: { text: {} } },
-        { name: "sun_exposure", label: this.t('sun_exposure'),
-            selector:{
-                select: {
-                    options: [
-                        { value: "🌑", label: this.t('shade') },
-                        { value: "⛅", label: this.t('partial_shade') },
-                        { value: "☀️", label: this.t('full_sun') }
-                    ]
-                }
-            }
-        },
+      { name: "plant_name", label: this.t('plant_name'), selector: { text: {} } },
+      {
+        name: "sun_exposure", label: this.t('sun_exposure'),
+        selector: {
+          select: {
+            options: [
+              { value: "🌑", label: this.t('shade') },
+              { value: "⛅", label: this.t('partial_shade') },
+              { value: "☀️", label: this.t('full_sun') }
+            ]
+          }
+        }
+      },
     ];
   }
 
   _schemaImage() {
-    return [{ 
-      name: "image", 
-      label: this.t('image_url'), 
+    return [{
+      name: "image",
+      label: this.t('image_url'),
       selector: { text: {} },
-      helper: this.t('image_helper') 
+      helper: this.t('image_helper')
     }];
   }
 
   _schemaSensors() {
     return [
-        { name: "battery_sensor", label: this.t('battery_sensor'), selector: { entity: { domain: "sensor" } } },
-        { name: "moisture_sensor", label: this.t('soil_moisture'), selector: { entity: { domain: "sensor" } } },
-        { name: "temperature_sensor", label: this.t('temperature'), selector: { entity: { domain: "sensor" } } },
-        { name: "humidity_sensor", label: this.t('air_humidity'), selector: { entity: { domain: "sensor" } } },
+      { name: "battery_sensor", label: this.t('battery_sensor'), selector: { entity: { domain: "sensor" } } },
+      { name: "moisture_sensor", label: this.t('soil_moisture'), selector: { entity: { domain: "sensor" } } },
+      { name: "temperature_sensor", label: this.t('temperature'), selector: { entity: { domain: "sensor" } } },
+      { name: "humidity_sensor", label: this.t('air_humidity'), selector: { entity: { domain: "sensor" } } },
     ];
   }
 

@@ -8,10 +8,11 @@ export class MkPlantAlertChipEditor extends LitElement {
         return { hass: {}, _config: {} };
     }
 
-    t(key) {
-        const lang = this.hass.language || 'en';
-        return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
-    }
+t(key) {
+  // Sprawdzamy, czy this.hass w ogóle istnieje
+  const lang = (this.hass && this.hass.language) ? this.hass.language : 'en';
+  return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
+}
 
     setConfig(config) {
         this._config = config;
