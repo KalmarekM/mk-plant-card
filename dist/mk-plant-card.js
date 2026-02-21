@@ -1,4 +1,4 @@
-import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4.0/lit-element.js?module";const a={pl:{soil_moisture:"Wilgotność ziemi",temperature:"Temperatura",air_humidity:"Wilgotność powietrza",range:"Zakres",save_fertilize:"Zapisz nawożenie",last_time:"Ostatnio",no_description:"Brak opisu",confirm_fertilize:"Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?",error_helper:"Błąd: Nie skonfigurowano pomocnika daty nawożenia!",card_description:"Karta rośliny z dziennikiem nawożenia",plant_name:"Nazwa rośliny",sun_exposure:"Nasłonecznienie",shade:"Cień",partial_shade:"Półcień",full_sun:"Pełne słońce",image_url:"URL zdjęcia",image_helper:"np. /local/images/plants/zdjecie.jpg",battery_sensor:"Sensor baterii",soil_moisture:"Wilgotność ziemi",temp:"Temperatura",air_hum:"Wilgotność powietrza",min_prefix:"Min.",max_prefix:"Max.",section_sensors:"Sensory rośliny",section_power:"Sensory Power Plant",section_helpers:"Pomocnicy",desc_sensor:"Sensor opisu (atrybut: instrukcja)",fert_helper:"Pomocnik daty nawożenia"},en:{plant_name:"Plant name",sun_exposure:"Sun exposure",shade:"Shade",partial_shade:"Partial shade",full_sun:"Full sun",image_url:"Image URL",image_helper:"e.g., /local/images/plants/photo.jpg",battery_sensor:"Battery sensor",soil_moisture:"Soil moisture",temp:"Temperature",air_hum:"Air humidity",min_prefix:"Min.",max_prefix:"Max.",section_sensors:"Plant sensors",section_power:"Power Plant sensors",section_helpers:"Helpers",desc_sensor:"Description sensor (attr: instruction)",fert_helper:"Fertilization date helper",soil_moisture:"Soil moisture",temperature:"Temperature",air_humidity:"Air humidity",range:"Range",save_fertilize:"Save fertilization",last_time:"Last time",no_description:"No description",confirm_fertilize:"Are you sure you want to save today's fertilization date?",error_helper:"Error: Fertilization helper not configured!",card_description:"Plant card with fertilization log"}};customElements.define("mk-plant-card-editor",class extends e{static get properties(){return{hass:{},_config:{}}}t(e){const t=this.hass.language||"en";return a[t]&&a[t][e]||a.en[e]||e}setConfig(e){this._config=e}_schemaPrimary(){return[{name:"plant_name",label:this.t("plant_name"),selector:{text:{}}},{name:"sun_exposure",label:this.t("sun_exposure"),selector:{select:{options:[{value:"🌑",label:this.t("shade")},{value:"⛅",label:this.t("partial_shade")},{value:"☀️",label:this.t("full_sun")}]}}}]}_schemaImage(){return[{name:"image",label:this.t("image_url"),selector:{text:{}},helper:this.t("image_helper")}]}_schemaSensors(){const e=this.t("soil_moisture"),t=this.t("temp"),i=this.t("air_hum");return[{name:"battery_sensor",label:this.t("battery_sensor"),selector:{entity:{domain:"sensor"}}},{name:"moisture_sensor",label:e,selector:{entity:{domain:"sensor"}}},{name:"temp_sensor",label:t,selector:{entity:{domain:"sensor"}}},{name:"humidity_sensor",label:i,selector:{entity:{domain:"sensor"}}}]}_schemaPowerPlant(){const e=this.t("min_prefix"),t=this.t("max_prefix");return[{name:"min_moisture",label:`${e} ${this.t("soil_moisture")}`,selector:{entity:{domain:"number"}}},{name:"max_moisture",label:`${t} ${this.t("soil_moisture")}`,selector:{entity:{domain:"number"}}},{name:"min_temp",label:`${e} ${this.t("temp")}`,selector:{entity:{domain:"number"}}},{name:"max_temp",label:`${t} ${this.t("temp")}`,selector:{entity:{domain:"number"}}},{name:"min_humidity",label:`${e} ${this.t("air_hum")}`,selector:{entity:{domain:"number"}}},{name:"max_humidity",label:`${t} ${this.t("air_hum")}`,selector:{entity:{domain:"number"}}}]}_schemaHelpers(){return[{name:"description_sensor",label:this.t("desc_sensor"),selector:{entity:{domain:"sensor"}}},{name:"fertilize_helper",label:this.t("fert_helper"),selector:{entity:{domain:"input_datetime"}}}]}render(){return this.hass&&this._config?t`
+import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4.0/lit-element.js?module";const s={pl:{section_sensors:"Sensory rośliny",section_power:"Sensory progowe (Power Plant)",section_helpers:"Pomocnicy i opisy",plant_name:"Nazwa rośliny",sun_exposure:"Nasłonecznienie",image_url:"URL zdjęcia",image_helper:"np. /local/images/plants/zdjecie.jpg",battery_sensor:"Sensor baterii",soil_moisture:"Wilgotność ziemi",temperature:"Temperatura",air_humidity:"Wilgotność powietrza",min_prefix:"Min.",max_prefix:"Max.",range:"Zakres",desc_sensor:"Sensor opisu (atrybut: instrukcja)",fert_helper:"Pomocnik daty nawożenia",save_fertilize:"Zapisz nawożenie",last_time:"Ostatnio",no_description:"Brak opisu",confirm_fertilize:"Czy na pewno chcesz zapisać dzisiejszą datę nawożenia?",error_helper:"Błąd: Nie skonfigurowano pomocnika daty nawożenia!",shade:"Cień",partial_shade:"Półcień",full_sun:"Pełne słońce",card_description:"Pełna karta rośliny z instrukcją i nawożeniem",chip_description:"Mały alert (chip) - widoczny tylko gdy roślina wymaga podlewania",error_missing_sensors:"Skonfiguruj wszystkie sensory (Wilgotność, Próg Min, Próg Max)",chip_label_name:"Etykieta (opcjonalnie)",chip_label_moisture:"Sensor wilgotności gleby",chip_label_desc:"Sensor progu MIN (atrybut: min)",chip_label_desc_max:"Sensor progu MAX (atrybut: max)"},en:{section_sensors:"Plant sensors",section_power:"Threshold sensors",section_helpers:"Helpers and descriptions",plant_name:"Plant name",sun_exposure:"Sun exposure",image_url:"Image URL",image_helper:"e.g., /local/images/plants/photo.jpg",battery_sensor:"Battery sensor",soil_moisture:"Soil moisture",temperature:"Temperature",air_humidity:"Air humidity",min_prefix:"Min.",max_prefix:"Max.",range:"Range",desc_sensor:"Description sensor (attr: instruction)",fert_helper:"Fertilization date helper",save_fertilize:"Save fertilization",last_time:"Last time",no_description:"No description",confirm_fertilize:"Are you sure you want to save today's fertilization date?",error_helper:"Error: Fertilization helper not configured!",shade:"Shade",partial_shade:"Partial shade",full_sun:"Full sun",card_description:"Full plant card with instructions and fertilization",chip_description:"Small alert chip - visible only when watering is needed",error_missing_sensors:"Please configure all sensors (Moisture, Min Threshold, Max Threshold)",chip_label_name:"Label (optional)",chip_label_moisture:"Soil moisture sensor",chip_label_desc:"MIN threshold sensor (min attr)",chip_label_desc_max:"MAX threshold sensor (max attr)"}};customElements.define("mk-plant-card-editor",class extends e{static get properties(){return{hass:{},_config:{}}}t(e){const t=this.hass.language||"en";return s[t]&&s[t][e]||s.en[e]||e}setConfig(e){this._config=e}_schemaPrimary(){return[{name:"plant_name",label:this.t("plant_name"),selector:{text:{}}},{name:"sun_exposure",label:this.t("sun_exposure"),selector:{select:{options:[{value:"🌑",label:this.t("shade")},{value:"⛅",label:this.t("partial_shade")},{value:"☀️",label:this.t("full_sun")}]}}}]}_schemaImage(){return[{name:"image",label:this.t("image_url"),selector:{text:{}},helper:this.t("image_helper")}]}_schemaSensors(){return[{name:"battery_sensor",label:this.t("battery_sensor"),selector:{entity:{domain:"sensor"}}},{name:"moisture_sensor",label:this.t("soil_moisture"),selector:{entity:{domain:"sensor"}}},{name:"temperature_sensor",label:this.t("temperature"),selector:{entity:{domain:"sensor"}}},{name:"humidity_sensor",label:this.t("air_humidity"),selector:{entity:{domain:"sensor"}}}]}_schemaPowerPlant(){const e=this.t("min_prefix"),t=this.t("max_prefix");return[{name:"min_moisture",label:`${e} ${this.t("soil_moisture")}`,selector:{entity:{domain:"number"}}},{name:"max_moisture",label:`${t} ${this.t("soil_moisture")}`,selector:{entity:{domain:"number"}}},{name:"min_temp",label:`${e} ${this.t("temperature")}`,selector:{entity:{domain:"number"}}},{name:"max_temp",label:`${t} ${this.t("temperature")}`,selector:{entity:{domain:"number"}}},{name:"min_humidity",label:`${e} ${this.t("air_humidity")}`,selector:{entity:{domain:"number"}}},{name:"max_humidity",label:`${t} ${this.t("air_humidity")}`,selector:{entity:{domain:"number"}}}]}_schemaHelpers(){return[{name:"description_sensor",label:this.t("desc_sensor"),selector:{entity:{domain:"sensor"}}},{name:"fertilize_helper",label:this.t("fert_helper"),selector:{entity:{domain:"input_datetime"}}}]}render(){return this.hass&&this._config?t`
       <div class="card-config">
         <ha-form
           .hass=${this.hass}
@@ -45,7 +45,15 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
           @value-changed=${this._valueChanged}
         ></ha-form>
       </div>
-    `:t``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});const s=i`
+    `:t``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}}),customElements.define("mk-plant-alert-chip-editor",class extends e{static get properties(){return{hass:{},_config:{}}}t(e){const t=this.hass.language||"en";return s[t]&&s[t][e]||s.en[e]||e}setConfig(e){this._config=e}_schema(){return[{name:"name",label:this.t("chip_label_name"),selector:{text:{}}},{name:"entity",label:this.t("chip_label_moisture"),selector:{entity:{domain:"sensor"}}},{name:"description_entity",label:this.t("chip_label_desc"),selector:{entity:{domain:"sensor"}}},{name:"description_max_entity",label:this.t("chip_label_desc_max"),selector:{entity:{domain:"sensor"}}}]}render(){return this.hass&&this._config?t`
+      <ha-form
+        .hass=${this.hass}
+        .data=${this._config}
+        .schema=${this._schema()}
+        .computeLabel=${e=>e.label}
+        @value-changed=${this._valueChanged}
+      ></ha-form>
+    `:t``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});const a=i`
   ha-card { padding: 16px; font-family: 'Roboto', sans-serif; border-radius: 12px; }
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }  
   
@@ -83,11 +91,10 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
   .details-section ha-markdown { display: block; font-size: 16px;}
   
   hr { border: 0; border-top: 1px solid var(--divider-color); margin: 10px 0; }
-`;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}constructor(){super(),this._showDetails=!1}t(e){const t=this.hass.language||"en";return a[t]&&a[t][e]||a.en[e]||e}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.plant_name)throw new Error("Musisz zdefiniować nazwę rośliny (plant_name)!");this.config={sun_exposure:"🌑",image:"",...e}}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:i}=this,a=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),r=parseFloat(this._getState(e.temp_sensor)),o=parseFloat(this._getState(e.humidity_sensor)),n=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),m=parseFloat(this._getState(e.min_temp)),c=parseFloat(this._getState(e.max_temp)),p=parseFloat(this._getState(e.min_humidity)),h=parseFloat(this._getState(e.max_humidity)),d=s<n?"blue":s>l?"red":"green",_=s<n||s>l?"mdi:water-alert":"mdi:water",u=r<m?"mdi:thermometer-low":r>c?"mdi:thermometer-high":"mdi:thermometer",g=r<m||r>c?"red":"green",f=o<p||o>h?"red":"green",y=o<p||o>h?"mdi:water-percent-alert":"mdi:water-percent",b=e.sun_exposure||"🌑";return t`
+`;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}constructor(){super(),this._showDetails=!1}t(e){const t=this.hass.language||"en";return s[t]&&s[t][e]||s.en[e]||e}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.entity||!e.description_entity||!e.description_max_entity){const e=document.querySelector("home-assistant")?.hass?.language||"en",t=s[e]&&s[e].error_missing_sensors||s.en.error_missing_sensors;throw new Error(t)}this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:i}=this,s=this._getState(e.battery_sensor),a=parseFloat(this._getState(e.moisture_sensor)),r=parseFloat(this._getState(e.temperature_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),o=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),h=parseFloat(this._getState(e.max_temp)),d=parseFloat(this._getState(e.min_humidity)),m=parseFloat(this._getState(e.max_humidity)),p=a<o?"blue":a>l?"red":"green",_=a<o||a>l?"mdi:water-alert":"mdi:water",u=r<c?"mdi:thermometer-low":r>h?"mdi:thermometer-high":"mdi:thermometer",g=r<c||r>h?"red":"green",f=n<d||n>m?"red":"green",b=n<d||n>m?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return t`
       <ha-card>
-      <!-- Nagłówek z nazwą rośliny, ikoną słońca i poziomem baterii -->
         <div class="header">
-          <div class="title">${b} ${e.plant_name} (🔋 ${a}%)</div>
+          <div class="title">${y} ${e.plant_name} (🔋 ${s}%)</div>
           <ha-icon 
             icon="${this._showDetails?"mdi:information":"mdi:information-outline"}" 
             class="info-icon"
@@ -97,16 +104,11 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
         </div>
         
         <div class="main-container">
-        
-          <!-- Kolumna z obrazkiem rośliny, kliknięcie otwiera więcej informacji o wilgotności -->
           <div class="image-col" @click="${()=>this._handleMoreInfo(e.moisture_sensor)}">
             <img src="${e.image}">
           </div>
 
-          <!-- Parametry rośliny: wilgotność, temperatura, wilgotność powietrza -->
           <div class="data-col">
-
-            <!-- Sekcja z instrukcją pielęgnacji, widoczna po kliknięciu ikony informacji -->
             ${this._showDetails?t`
               <div class="details-section">
                 <hr>
@@ -116,37 +118,33 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
               </div>
               `:""}
             
-            <!-- Parametr wilgotności ziemi -->
             <div class="param-row">
-              <ha-icon icon="${_}" style="color: ${d}"></ha-icon>
+              <ha-icon icon="${_}" style="color: ${p}"></ha-icon>
               <div class="param-text">
                 <span class="p-name">${this.t("soil_moisture")}</span>
-                <span class="p-state">${s} %</span>
+                <span class="p-state">${a} %</span>
               </div>
-              <div class="range">${this.t("range")}: ${n} - ${l}%</div>
+              <div class="range">${this.t("range")}: ${o} - ${l}%</div>
             </div>
             
-            <!-- Parametr temperatury -->
             <div class="param-row">
               <ha-icon icon="${u}" style="color: ${g}"></ha-icon>
               <div class="param-text">
                 <span class="p-name">${this.t("temperature")}</span>
                 <span class="p-state">${r} °C</span>
               </div>
-              <div class="range">${this.t("range")}: ${m} - ${c}°C</div>
+              <div class="range">${this.t("range")}: ${c} - ${h}°C</div>
             </div>
 
-            <!-- Parametr wilgotności powietrza -->
             <div class="param-row">
-              <ha-icon icon="${y}" style="color: ${f}"></ha-icon>
+              <ha-icon icon="${b}" style="color: ${f}"></ha-icon>
               <div class="param-text">
                 <span class="p-name">${this.t("air_humidity")}</span>
-                <span class="p-state">${o} %</span>
+                <span class="p-state">${n} %</span>
               </div>
-              <div class="range">${this.t("range")}: ${p} - ${h}%</div>
+              <div class="range">${this.t("range")}: ${d} - ${m}%</div>
             </div>
 
-            <!-- Przycisk do zapisywania daty nawożenia -->
             <div class="fertilize-btn" style="margin-top: 10px;" @click="${()=>this._callScript(e.fertilize_helper)}">
               <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
               <div class="btn-text">
@@ -156,6 +154,27 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
             </div>
           </div>
         </div>
-
       </ha-card>
-    `}_toggleDetails(){this._showDetails=!this._showDetails}_handleMoreInfo(e){const t=new Event("hass-more-info",{bubbles:!0,composed:!0});t.detail={entityId:e},this.dispatchEvent(t)}_callScript(e){if(e){if(confirm(this.t("confirm_fertilize"))){const t=new Date,i=t.getFullYear(),a=String(t.getMonth()+1).padStart(2,"0"),s=String(t.getDate()).padStart(2,"0");this.hass.callService("input_datetime","set_datetime",{entity_id:e,date:`${i}-${a}-${s}`})}}else alert(this.t("error_helper"))}static get styles(){return s}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:a[document.querySelector("home-assistant")?.hass?.language||"en"]?.card_description||a.en.card_description,preview:!0});
+    `}_toggleDetails(){this._showDetails=!this._showDetails}_handleMoreInfo(e){const t=new Event("hass-more-info",{bubbles:!0,composed:!0});t.detail={entityId:e},this.dispatchEvent(t)}_callScript(e){if(e){if(confirm(this.t("confirm_fertilize"))){const t=new Date,i=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;this.hass.callService("input_datetime","set_datetime",{entity_id:e,date:i})}}else alert(this.t("error_helper"))}static get styles(){return a}});customElements.define("mk-plant-alert-chip",class extends e{static get properties(){return{hass:{},config:{}}}static getConfigElement(){return document.createElement("mk-plant-alert-chip-editor")}render(){const{config:e,hass:i}=this,s=i.states[e.entity],a=i.states[e.description_entity],r=i.states[e.description_max_entity];if(!s||!a||!r)return t``;const n=parseFloat(s.state),o=parseFloat(a.attributes.min),l=parseFloat(r.attributes.max);let c=!1,h="#ff4444",d="rgba(255, 68, 68, 0.5)";return n<o?(c=!0,h="#ff4444",d="rgba(255, 68, 68, 0.5)"):n>l&&(c=!0,h="#44b4ff",d="rgba(68, 180, 255, 0.5)"),c?t`
+      <style>
+        :host { display: inline-block; margin-right: 8px; }
+        .chip {
+          display: flex; align-items: center;
+          background: var(--card-background-color, #1c1c1c);
+          border: 1px solid ${h}; border-radius: 16px;
+          padding: 4px 10px; cursor: pointer;
+          animation: pulse 2s infinite;
+        }
+        ha-icon { color: ${h}; --mdc-icon-size: 18px; margin-right: 4px; }
+        span { font-size: 12px; font-weight: bold; color: var(--primary-text-color); }
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 ${d}; }
+          70% { box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+        }
+      </style>
+      <div class="chip" @click="${()=>this._handleMoreInfo()}">
+        <ha-icon icon="mdi:water-alert"></ha-icon>
+        <span>${e.name||s.attributes.friendly_name}</span>
+      </div>
+    `:t``}_handleMoreInfo(){const e=new Event("hass-more-info",{bubbles:!0,composed:!0});e.detail={entityId:this.config.entity},this.dispatchEvent(e)}setConfig(e){if(!e.entity||!e.description_entity)throw new Error("Musisz zdefiniować entity i description_entity");this.config=e}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:s[document.querySelector("home-assistant")?.hass?.language||"en"]?.card_description||s.en.card_description,preview:!0}),window.customCards.push({type:"mk-plant-alert-chip",name:"MK Plant Alert Chip",description:s[document.querySelector("home-assistant")?.hass?.language||"en"]?.chip_description||s.en.chip_description,preview:!0});

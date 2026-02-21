@@ -42,14 +42,11 @@ class MkPlantCardEditor extends LitElement {
   }
 
   _schemaSensors() {
-    const soil = this.t('soil_moisture');
-    const temp = this.t('temp');
-    const hum = this.t('air_hum');
     return [
         { name: "battery_sensor", label: this.t('battery_sensor'), selector: { entity: { domain: "sensor" } } },
-        { name: "moisture_sensor", label: soil, selector: { entity: { domain: "sensor" } } },
-        { name: "temp_sensor", label: temp, selector: { entity: { domain: "sensor" } } },
-        { name: "humidity_sensor", label: hum, selector: { entity: { domain: "sensor" } } },
+        { name: "moisture_sensor", label: this.t('soil_moisture'), selector: { entity: { domain: "sensor" } } },
+        { name: "temperature_sensor", label: this.t('temperature'), selector: { entity: { domain: "sensor" } } },
+        { name: "humidity_sensor", label: this.t('air_humidity'), selector: { entity: { domain: "sensor" } } },
     ];
   }
 
@@ -59,10 +56,10 @@ class MkPlantCardEditor extends LitElement {
     return [
       { name: "min_moisture", label: `${min} ${this.t('soil_moisture')}`, selector: { entity: { domain: "number" } } },
       { name: "max_moisture", label: `${max} ${this.t('soil_moisture')}`, selector: { entity: { domain: "number" } } },
-      { name: "min_temp", label: `${min} ${this.t('temp')}`, selector: { entity: { domain: "number" } } },
-      { name: "max_temp", label: `${max} ${this.t('temp')}`, selector: { entity: { domain: "number" } } },
-      { name: "min_humidity", label: `${min} ${this.t('air_hum')}`, selector: { entity: { domain: "number" } } },
-      { name: "max_humidity", label: `${max} ${this.t('air_hum')}`, selector: { entity: { domain: "number" } } },
+      { name: "min_temp", label: `${min} ${this.t('temperature')}`, selector: { entity: { domain: "number" } } },
+      { name: "max_temp", label: `${max} ${this.t('temperature')}`, selector: { entity: { domain: "number" } } },
+      { name: "min_humidity", label: `${min} ${this.t('air_humidity')}`, selector: { entity: { domain: "number" } } },
+      { name: "max_humidity", label: `${max} ${this.t('air_humidity')}`, selector: { entity: { domain: "number" } } },
     ];
   }
 
@@ -136,4 +133,52 @@ class MkPlantCardEditor extends LitElement {
   }
 }
 
+/* EDYTOR DLA CHIPA ALARMOWEGO */
+class MkPlantAlertChipEditor extends LitElement {
+  static get properties() {
+    return { hass: {}, _config: {} };
+  }
+
+  t(key) {
+    const lang = this.hass.language || 'en';
+    return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
+  }
+
+  setConfig(config) {
+    this._config = config;
+  }
+
+  _schema() {
+    return [
+      { name: "name", label: this.t('chip_label_name'), selector: { text: {} } },
+      { name: "entity", label: this.t('chip_label_moisture'), selector: { entity: { domain: "sensor" } } },
+      { name: "description_entity", label: this.t('chip_label_desc'), selector: { entity: { domain: "sensor" } } },
+      { name: "description_max_entity", label: this.t('chip_label_desc_max'), selector: { entity: { domain: "sensor" } } },
+    ];
+  }
+
+  render() {
+    if (!this.hass || !this._config) return html``;
+    return html`
+      <ha-form
+        .hass=${this.hass}
+        .data=${this._config}
+        .schema=${this._schema()}
+        .computeLabel=${(s) => s.label}
+        @value-changed=${this._valueChanged}
+      ></ha-form>
+    `;
+  }
+
+  _valueChanged(ev) {
+    const event = new CustomEvent("config-changed", {
+      detail: { config: ev.detail.value },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
+}
+
 customElements.define("mk-plant-card-editor", MkPlantCardEditor);
+customElements.define("mk-plant-alert-chip-editor", MkPlantAlertChipEditor);

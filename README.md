@@ -1,6 +1,10 @@
 ## MK Plant Card 🌿
 Zaawansowana i estetyczna karta dla Home Assistant, dedykowana monitorowaniu roślin. Pozwala na bieżąco śledzić parametry życiowe rośliny oraz prowadzić prosty dziennik pielęgnacji.
 
+<p align="center">
+  <img src="images/construction-banner.png" height="60" alt="Under Construction">
+</p>
+
 ## Główne Funkcje
 - 📊 **Monitorowanie parametrów**: Wilgotność ziemi, temperatura oraz wilgotność powietrza.
 - 🎨 **Inteligentne kolory**: Ikony zmieniają kolory w zależności od zdefiniowanych norm.
