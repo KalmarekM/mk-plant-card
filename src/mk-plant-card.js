@@ -178,18 +178,26 @@ class MkPlantAlertChip extends LitElement {
 render() {
     const { config, hass } = this;
     const state = hass.states[config.entity];
-    // Upewnij się, że używasz config.description_entity
     const descMinState = hass.states[config.description_entity];
     const descMaxState = hass.states[config.description_max_entity];
 
-    // Jeśli sensorów nie ma, zwracamy pusty html zamiast błędu (dzięki temu edytor nie "wybucha")
+    // Sprawdzamy czy encje w ogóle istnieją w systemie
     if (!state || !descMinState || !descMaxState) {
-        return html`<div style="color: orange; font-size: 10px;">Oczekiwanie na dane...</div>`;
+        return html`<div style="color: orange; font-size: 10px; border: 1px dashed orange; padding: 4px;">
+            ${config.name}: Brak encji w HA (sprawdź prefiks number. lub sensor.)
+        </div>`;
     }
-    // ... reszta kodu
+
     const currentV = parseFloat(state.state);
-    const minV = parseFloat(descMinState.attributes.min);
-    const maxV = parseFloat(descMaxState.attributes.max);
+    
+    // KLUCZOWA POPRAWKA: Pobieramy ze .state, a nie z .attributes.min/max
+    const minV = parseFloat(descMinState.state);
+    const maxV = parseFloat(descMaxState.state);
+
+    // Debugowanie (opcjonalne - usuń po testach jeśli chcesz)
+    if (isNaN(minV) || isNaN(maxV)) {
+        return html`<div style="color: red; font-size: 10px;">Błąd: Wartości progów nie są liczbami!</div>`;
+    }
 
     let isAlert = false;
     let iconColor = "#ff4444";
@@ -197,14 +205,15 @@ render() {
 
     if (currentV < minV) {
       isAlert = true;
-      iconColor = "#ff4444"; // Czerwony - sucho
+      iconColor = "#ff4444"; // Za sucho
       glowColor = "rgba(255, 68, 68, 0.5)";
     } else if (currentV > maxV) {
       isAlert = true;
-      iconColor = "#44b4ff"; // Niebieski - mokro
+      iconColor = "#44b4ff"; // Za mokro
       glowColor = "rgba(68, 180, 255, 0.5)";
     }
 
+    // Jeśli nie ma alarmu, karta nic nie wyświetla
     if (!isAlert) return html``;
 
     return html`
@@ -230,7 +239,7 @@ render() {
         <span>${config.name || state.attributes.friendly_name}</span>
       </div>
     `;
-  }
+}
 
   _handleMoreInfo() {
     const e = new Event("hass-more-info", { bubbles: true, composed: true });

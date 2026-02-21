@@ -93,7 +93,7 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
   .details-section ha-markdown { display: block; font-size: 16px;}
   
   hr { border: 0; border-top: 1px solid var(--divider-color); margin: 10px 0; }
-`;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}constructor(){super(),this._showDetails=!1}t(e){const t=this.hass.language||"en";return s[t]&&s[t][e]||s.en[e]||e}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.plant_name){const e=document.querySelector("home-assistant")?.hass?.language||"en",t=s[e]&&s[e].error_missing_name||s.en.error_missing_name;throw new Error(t)}this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:i}=this,s=this._getState(e.battery_sensor),a=parseFloat(this._getState(e.moisture_sensor)),r=parseFloat(this._getState(e.temperature_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),o=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),m=parseFloat(this._getState(e.max_temp)),d=parseFloat(this._getState(e.min_humidity)),h=parseFloat(this._getState(e.max_humidity)),p=a<o?"blue":a>l?"red":"green",_=a<o||a>l?"mdi:water-alert":"mdi:water",u=r<c?"mdi:thermometer-low":r>m?"mdi:thermometer-high":"mdi:thermometer",g=r<c||r>m?"red":"green",f=n<d||n>h?"red":"green",b=n<d||n>h?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return t`
+`;customElements.define("mk-plant-card",class extends e{static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}constructor(){super(),this._showDetails=!1}t(e){const t=this.hass.language||"en";return s[t]&&s[t][e]||s.en[e]||e}static getConfigElement(){return document.createElement("mk-plant-card-editor")}setConfig(e){if(!e.plant_name){const e=document.querySelector("home-assistant")?.hass?.language||"en",t=s[e]&&s[e].error_missing_name||s.en.error_missing_name;throw new Error(t)}this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:i}=this,s=this._getState(e.battery_sensor),a=parseFloat(this._getState(e.moisture_sensor)),r=parseFloat(this._getState(e.temperature_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),o=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),d=parseFloat(this._getState(e.max_temp)),m=parseFloat(this._getState(e.min_humidity)),h=parseFloat(this._getState(e.max_humidity)),p=a<o?"blue":a>l?"red":"green",_=a<o||a>l?"mdi:water-alert":"mdi:water",u=r<c?"mdi:thermometer-low":r>d?"mdi:thermometer-high":"mdi:thermometer",g=r<c||r>d?"red":"green",f=n<m||n>h?"red":"green",b=n<m||n>h?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return t`
       <ha-card>
         <div class="header">
           <div class="title">${y} ${e.plant_name} (🔋 ${s}%)</div>
@@ -135,7 +135,7 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
                 <span class="p-name">${this.t("temperature")}</span>
                 <span class="p-state">${r} °C</span>
               </div>
-              <div class="range">${this.t("range")}: ${c} - ${m}°C</div>
+              <div class="range">${this.t("range")}: ${c} - ${d}°C</div>
             </div>
 
             <div class="param-row">
@@ -144,7 +144,7 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
                 <span class="p-name">${this.t("air_humidity")}</span>
                 <span class="p-state">${n} %</span>
               </div>
-              <div class="range">${this.t("range")}: ${d} - ${h}%</div>
+              <div class="range">${this.t("range")}: ${m} - ${h}%</div>
             </div>
 
             <div class="fertilize-btn" style="margin-top: 10px;" @click="${()=>this._callScript(e.fertilize_helper)}">
@@ -157,20 +157,22 @@ import{LitElement as e,html as t,css as i}from"https://unpkg.com/lit-element@2.4
           </div>
         </div>
       </ha-card>
-    `}_toggleDetails(){this._showDetails=!this._showDetails}_handleMoreInfo(e){const t=new Event("hass-more-info",{bubbles:!0,composed:!0});t.detail={entityId:e},this.dispatchEvent(t)}_callScript(e){if(e){if(confirm(this.t("confirm_fertilize"))){const t=new Date,i=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;this.hass.callService("input_datetime","set_datetime",{entity_id:e,date:i})}}else alert(this.t("error_helper"))}static get styles(){return a}});customElements.define("mk-plant-alert-chip",class extends e{static get properties(){return{hass:{},config:{}}}static getConfigElement(){return document.createElement("mk-plant-alert-chip-editor")}render(){const{config:e,hass:i}=this,s=i.states[e.entity],a=i.states[e.description_entity],r=i.states[e.description_max_entity];if(!s||!a||!r)return t`<div style="color: orange; font-size: 10px;">Oczekiwanie na dane...</div>`;const n=parseFloat(s.state),o=parseFloat(a.attributes.min),l=parseFloat(r.attributes.max);let c=!1,m="#ff4444",d="rgba(255, 68, 68, 0.5)";return n<o?(c=!0,m="#ff4444",d="rgba(255, 68, 68, 0.5)"):n>l&&(c=!0,m="#44b4ff",d="rgba(68, 180, 255, 0.5)"),c?t`
+    `}_toggleDetails(){this._showDetails=!this._showDetails}_handleMoreInfo(e){const t=new Event("hass-more-info",{bubbles:!0,composed:!0});t.detail={entityId:e},this.dispatchEvent(t)}_callScript(e){if(e){if(confirm(this.t("confirm_fertilize"))){const t=new Date,i=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;this.hass.callService("input_datetime","set_datetime",{entity_id:e,date:i})}}else alert(this.t("error_helper"))}static get styles(){return a}});customElements.define("mk-plant-alert-chip",class extends e{static get properties(){return{hass:{},config:{}}}static getConfigElement(){return document.createElement("mk-plant-alert-chip-editor")}render(){const{config:e,hass:i}=this,s=i.states[e.entity],a=i.states[e.description_entity],r=i.states[e.description_max_entity];if(!s||!a||!r)return t`<div style="color: orange; font-size: 10px; border: 1px dashed orange; padding: 4px;">
+            ${e.name}: Brak encji w HA (sprawdź prefiks number. lub sensor.)
+        </div>`;const n=parseFloat(s.state),o=parseFloat(a.state),l=parseFloat(r.state);if(isNaN(o)||isNaN(l))return t`<div style="color: red; font-size: 10px;">Błąd: Wartości progów nie są liczbami!</div>`;let c=!1,d="#ff4444",m="rgba(255, 68, 68, 0.5)";return n<o?(c=!0,d="#ff4444",m="rgba(255, 68, 68, 0.5)"):n>l&&(c=!0,d="#44b4ff",m="rgba(68, 180, 255, 0.5)"),c?t`
       <style>
         :host { display: inline-block; margin-right: 8px; }
         .chip {
           display: flex; align-items: center;
           background: var(--card-background-color, #1c1c1c);
-          border: 1px solid ${m}; border-radius: 16px;
+          border: 1px solid ${d}; border-radius: 16px;
           padding: 4px 10px; cursor: pointer;
           animation: pulse 2s infinite;
         }
-        ha-icon { color: ${m}; --mdc-icon-size: 18px; margin-right: 4px; }
+        ha-icon { color: ${d}; --mdc-icon-size: 18px; margin-right: 4px; }
         span { font-size: 12px; font-weight: bold; color: var(--primary-text-color); }
         @keyframes pulse {
-          0% { box-shadow: 0 0 0 0 ${d}; }
+          0% { box-shadow: 0 0 0 0 ${m}; }
           70% { box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); }
           100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
         }
