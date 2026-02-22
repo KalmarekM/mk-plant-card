@@ -2,38 +2,43 @@ import { css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 
 export const cardStyles = css`
   ha-card { padding: 16px; font-family: 'Roboto', sans-serif; border-radius: 12px; }
-  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }  
   
+  /* ---- NAGŁÓWEK ---- */
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }   
+  
+  .header-icons { display: flex; gap: 12px; align-items: center; }
+
   /* ---- NAZWA ROŚLINY ---- */
   .title { font-weight: bold; font-size: 18px; }
-  .info-icon { cursor: pointer; transition: 0.3s; }
+  
+  /* IKONY AKCJI */
+  .info-icon, .scroll-top-icon { 
+    cursor: pointer; 
+    transition: 0.3s; 
+    --mdc-icon-size: 24px; 
+  }
+  
+  .scroll-top-icon { color: var(--secondary-text-color); opacity: 0.7; }
+  .scroll-top-icon:hover { opacity: 1; color: var(--primary-color); transform: translateY(-2px); }
       
   .main-container { display: flex; gap: 12px; }
-  .image-col { flex: 1; cursor: pointer; } /* 1/3 szerokości */
-  .data-col { flex: 2; display: flex; flex-direction: column; gap: 6px; } /* 2/3 szerokości */
+  .image-col { flex: 1; cursor: pointer; } 
+  .data-col { flex: 2; display: flex; flex-direction: column; gap: 6px; } 
       
   img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
       
   .param-row { display: flex; align-items: center; gap: 10px; background: var(--secondary-background-color); padding: 6px 10px; border-radius: 8px; }
   .param-text { display: flex; flex-direction: column; flex-grow: 1; }
   
-  /* ---- CZUJNIKI (WARTOŚCI I NAZWY) ---- */
   .p-name { font-size: 16px; color: var(--secondary-text-color); }
-  
-  /* --- WARTOŚĆ CZUJNIKA --- */
   .p-state { font-weight: bold; font-size: 19px; }
-  
-  /* --- WARTOŚCI OD - DO --- */
   .range { font-size: 19px; font-weight: bold; white-space: nowrap; }
       
-  /* ---- PRZYCISK NAWOŻENIA ---- */
   .fertilize-btn { margin-top: 12px; display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--primary-color); color: white; border-radius: 8px; cursor: pointer; }
   .btn-text { display: flex; flex-direction: column; }
   .btn-primary { font-weight: bold; font-size: 18px; }
   .btn-secondary { font-size: 15px; opacity: 0.9; }
-      
   
-  /* ---- SEKCJA SZCZEGÓŁÓW ---- */
   .details-section { font-size: 16px; line-height: 1.6; color: var(--primary-text-color); }
   .details-section ha-markdown { display: block; font-size: 16px;}
   
