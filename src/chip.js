@@ -95,7 +95,7 @@ export class MkPlantAlertChip extends LitElement {
         return html`
             <div class="chip" 
                 style="..." 
-                @click="${() => this._handleScrollToCard()}">
+                @click="${(ev) => this._handleScrollToCard(ev)}">
 
             <ha-icon icon="${icon}" style="color: ${iconColor}"></ha-icon>
             
@@ -106,10 +106,16 @@ export class MkPlantAlertChip extends LitElement {
         `;
     }
 
-    _handleScrollToCard() {
-        const moistureEntity = this.config.entity; // To jest nasz klucz połączenia
+    _handleScrollToCard(ev) {
+        // 1. ZATRZYMUJEMY standardową akcję Home Assistant
+        if (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
 
-        // Przebijamy się przez warstwy Shadow DOM Home Assistanta
+        const moistureEntity = this.config.entity;
+
+        // Przebijamy się do widoku (Lovelace View)
         const root = document.querySelector("home-assistant")
             ?.shadowRoot?.querySelector("home-assistant-main")
             ?.shadowRoot?.querySelector("ha-drawer")
@@ -122,19 +128,16 @@ export class MkPlantAlertChip extends LitElement {
             return;
         }
 
-        // Pobieramy wszystkie karty mk-plant-card na widoku
+        // Szukamy karty - upewnij się, że mk-plant-card jest poprawnie zarejestrowany
         const allCards = Array.from(root.querySelectorAll("mk-plant-card"));
-
-        // Szukamy tej, która monitoruje ten sam sensor wilgotności
         const targetCard = allCards.find(card =>
             card.config && card.config.moisture_sensor === moistureEntity
         );
 
         if (targetCard) {
-            // Scroll do karty
             targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
 
-            // Wizualne potwierdzenie znalezienia karty (efekt "highlight")
+            // Wizualny highlight
             targetCard.style.transition = "box-shadow 0.5s ease-in-out, transform 0.5s ease-in-out";
             targetCard.style.boxShadow = "0 0 20px var(--accent-color)";
             targetCard.style.transform = "scale(1.02)";
@@ -144,11 +147,10 @@ export class MkPlantAlertChip extends LitElement {
                 targetCard.style.transform = "scale(1)";
             }, 2000);
         } else {
-            // Jeśli karta nie jest na tym dashboardzie, otwórz standardowe okno
+            // Jeśli nie znaleziono karty na tym widoku, pozwól otworzyć historię
             this._fallbackMoreInfo();
         }
     }
-
     _fallbackMoreInfo() {
         const e = new Event("hass-more-info", { bubbles: true, composed: true });
         e.detail = { entityId: this.config.entity };

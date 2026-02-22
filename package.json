@@ -1,6 +1,6 @@
 {
   "name": "mk-plant-card",
-  "version": "1.0.25-a",
+  "version": "1.0.26-a",
   "type": "module",
   "description": "Dedykowana karta dla roślin do Home Assistant, stworzona według autorskiego wzorca Marka. Karta oferuje przejrzysty układ 1/3 (zdjęcie) do 2/3 (dane) oraz dynamiczne ikony i kolory.",
   "main": "dist/mk-plant-card.js",
