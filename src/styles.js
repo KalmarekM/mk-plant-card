@@ -41,18 +41,20 @@ export const cardStyles = css`
 `;
 
 export const chipStyles = css`
-  :host {
+:host {
     display: inline-block;
-    margin-right: 8px;
   }
+  
   .chip {
     display: flex;
     align-items: center;
-    background: var(--card-background-color, #1c1c1c);
+    background: var(--ha-card-background, var(--card-background-color, #1c1c1c));
+    border: 1px solid var(--glow-color); /* Używamy zmiennej koloru */
     border-radius: 16px;
     padding: 4px 10px;
     cursor: pointer;
     animation: pulse 2s infinite;
+    white-space: nowrap; /* Żeby nazwa rośliny nie uciekła pod spód */
   }
   ha-icon {
     --mdc-icon-size: 18px;
