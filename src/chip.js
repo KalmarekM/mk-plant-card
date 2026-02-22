@@ -47,7 +47,6 @@ export class MkPlantAlertChip extends LitElement {
         const descMinState = hass.states[config.description_entity];
         const descMaxState = hass.states[config.description_max_entity];
 
-        // Guard dla brakujących encji
         if (!state || !descMinState || !descMaxState) {
             return html`
                 <div class="chip" style="border-style: dashed; opacity: 0.5;">
@@ -55,7 +54,6 @@ export class MkPlantAlertChip extends LitElement {
                 </div>`;
         }
 
-        // Logika obszaru
         const entityRegistry = hass.entities ? hass.entities[entityId] : null;
         let areaName = "";
         if (entityRegistry && entityRegistry.area_id) {

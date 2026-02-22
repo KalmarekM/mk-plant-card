@@ -3,7 +3,6 @@ import { cardStyles } from './styles.js';
 import { translations } from './translations.js';
 import './card-editor.js';
 
-/* --- GŁÓWNA KARTA ROŚLINY --- */
 class MkPlantCard extends LitElement {
 
   constructor() {
@@ -25,7 +24,6 @@ class MkPlantCard extends LitElement {
 
 
   t(key) {
-    // Sprawdzamy, czy this.hass w ogóle istnieje
     const lang = (this.hass && this.hass.language) ? this.hass.language : 'en';
     return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
   }
@@ -33,10 +31,8 @@ class MkPlantCard extends LitElement {
 
   setConfig(config) {
     if (!config.plant_name) {
-      // Pobieramy język z głównego obiektu Home Assistant lub domyślnie 'en'
       const lang = document.querySelector('home-assistant')?.hass?.language || 'en';
 
-      // Pobieramy tłumaczenie z pliku translations.js
       const errorMsg = (translations[lang] && translations[lang]['error_missing_name']) ||
         (translations['en']['error_missing_name']);
 
@@ -156,7 +152,6 @@ class MkPlantCard extends LitElement {
   _toggleDetails() { this._showDetails = !this._showDetails; }
   
   _scrollToTop() {
-    // Przewijamy do samego początku strony głównej Home Assistant
     window.scrollTo({
       top: 0,
       behavior: "smooth"
