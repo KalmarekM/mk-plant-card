@@ -41,30 +41,37 @@ export const cardStyles = css`
 `;
 
 export const chipStyles = css`
-:host {
+  :host {
     display: inline-block;
   }
   
   .chip {
     display: flex;
     align-items: center;
-    background: var(--ha-card-background, var(--card-background-color, #1c1c1c));
-    border: 1px solid var(--glow-color); /* Używamy zmiennej koloru */
     border-radius: 16px;
     padding: 4px 10px;
     cursor: pointer;
-    animation: pulse 2s infinite;
-    white-space: nowrap; /* Żeby nazwa rośliny nie uciekła pod spód */
+    white-space: nowrap;
+    transition: all 0.3s ease; /* Płynne pojawianie się tła i ramki */
+    border: 1px solid transparent; /* Domyślnie brak ramki */
   }
+
   ha-icon {
     --mdc-icon-size: 18px;
-    margin-right: 4px;
+    /* Usuwamy margines, jeśli nie ma tekstu (spanu) */
   }
+
+  /* Margines tylko gdy po ikonie następuje span z tekstem */
+  ha-icon + span {
+    margin-left: 4px;
+  }
+
   span {
     font-size: 12px;
     font-weight: bold;
     color: var(--primary-text-color);
   }
+
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 var(--glow-color); }
     70% { box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); }

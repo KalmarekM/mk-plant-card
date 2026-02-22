@@ -37,30 +37,37 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
   
   hr { border: 0; border-top: 1px solid var(--divider-color); margin: 10px 0; }
 `,s=e`
-:host {
+  :host {
     display: inline-block;
   }
   
   .chip {
     display: flex;
     align-items: center;
-    background: var(--ha-card-background, var(--card-background-color, #1c1c1c));
-    border: 1px solid var(--glow-color); /* Używamy zmiennej koloru */
     border-radius: 16px;
     padding: 4px 10px;
     cursor: pointer;
-    animation: pulse 2s infinite;
-    white-space: nowrap; /* Żeby nazwa rośliny nie uciekła pod spód */
+    white-space: nowrap;
+    transition: all 0.3s ease; /* Płynne pojawianie się tła i ramki */
+    border: 1px solid transparent; /* Domyślnie brak ramki */
   }
+
   ha-icon {
     --mdc-icon-size: 18px;
-    margin-right: 4px;
+    /* Usuwamy margines, jeśli nie ma tekstu (spanu) */
   }
+
+  /* Margines tylko gdy po ikonie następuje span z tekstem */
+  ha-icon + span {
+    margin-left: 4px;
+  }
+
   span {
     font-size: 12px;
     font-weight: bold;
     color: var(--primary-text-color);
   }
+
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 var(--glow-color); }
     70% { box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); }
@@ -128,10 +135,10 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
           @value-changed=${this._valueChanged}
         ></ha-form>
       </div>
-    `:i``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});customElements.define("mk-plant-card",class extends t{constructor(){super(),this._showDetails=!1}static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}static getConfigElement(){return document.createElement("mk-plant-card-editor")}t(e){const t=this.hass&&this.hass.language?this.hass.language:"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){if(!e.plant_name){const e=document.querySelector("home-assistant")?.hass?.language||"en",t=r[e]&&r[e].error_missing_name||r.en.error_missing_name;throw new Error(t)}this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:t}=this;if(!t||!e)return i``;const a=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),r=parseFloat(this._getState(e.temperature_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),o=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),d=parseFloat(this._getState(e.max_temp)),h=parseFloat(this._getState(e.min_humidity)),p=parseFloat(this._getState(e.max_humidity)),m=s<o?"red":s>l?"blue":"green",_=s<o||s>l?"mdi:water-alert":"mdi:water",u=r<c?"blue":r>d?"red":"green",g=r<c?"mdi:thermometer-low":r>d?"mdi:thermometer-high":"mdi:thermometer",f=n<h||n>p?"red":"green",b=n<h||n>p?"mdi:water-percent-alert":"mdi:water-percent",y=e.sun_exposure||"🌑";return i`
+    `:i``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});customElements.define("mk-plant-card",class extends t{constructor(){super(),this._showDetails=!1}static get properties(){return{hass:{},config:{},_showDetails:{type:Boolean}}}static getConfigElement(){return document.createElement("mk-plant-card-editor")}t(e){const t=this.hass&&this.hass.language?this.hass.language:"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){if(!e.plant_name){const e=document.querySelector("home-assistant")?.hass?.language||"en",t=r[e]&&r[e].error_missing_name||r.en.error_missing_name;throw new Error(t)}this.config=e}_getState(e){return this.hass.states[e]?this.hass.states[e].state:"—"}render(){const{config:e,hass:t}=this;if(!t||!e)return i``;const a=this._getState(e.battery_sensor),s=parseFloat(this._getState(e.moisture_sensor)),r=parseFloat(this._getState(e.temperature_sensor)),n=parseFloat(this._getState(e.humidity_sensor)),o=parseFloat(this._getState(e.min_moisture)),l=parseFloat(this._getState(e.max_moisture)),c=parseFloat(this._getState(e.min_temp)),d=parseFloat(this._getState(e.max_temp)),h=parseFloat(this._getState(e.min_humidity)),p=parseFloat(this._getState(e.max_humidity)),m=s<o?"red":s>l?"blue":"green",_=s<o||s>l?"mdi:water-alert":"mdi:water",u=r<c?"blue":r>d?"red":"green",g=r<c?"mdi:thermometer-low":r>d?"mdi:thermometer-high":"mdi:thermometer",f=n<h||n>p?"red":"green",y=n<h||n>p?"mdi:water-percent-alert":"mdi:water-percent",b=e.sun_exposure||"🌑";return i`
       <ha-card>
         <div class="header">
-          <div class="title">${y} ${e.plant_name} (🔋 ${a}%)</div>
+          <div class="title">${b} ${e.plant_name} (🔋 ${a}%)</div>
           <ha-icon 
             icon="${this._showDetails?"mdi:information":"mdi:information-outline"}" 
             class="info-icon"
@@ -174,7 +181,7 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
             </div>
 
             <div class="param-row">
-              <ha-icon icon="${b}" style="color: ${f}"></ha-icon>
+              <ha-icon icon="${y}" style="color: ${f}"></ha-icon>
               <div class="param-text">
                 <span class="p-name">${this.t("air_humidity")}</span>
                 <span class="p-state">${n} %</span>
@@ -210,11 +217,21 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
           ></mk-plant-alert-chip>
         </div>
       </div>
-    `:i``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});customElements.define("mk-plant-alert-chip",class extends t{static get properties(){return{hass:{},config:{}}}static get styles(){return s}static getConfigElement(){return document.createElement("mk-plant-alert-chip-editor")}t(e){const t=this.hass&&this.hass.language?this.hass.language:"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){if(!e.entity||!e.description_entity||!e.description_max_entity)throw new Error(this.t("configure_all_sensors"));this.config=e}static getStubConfig(){return{name:"Roślina",entity:"",description_entity:"",description_max_entity:""}}render(){const{config:e,hass:t}=this;if(!t||!e)return i``;const a=e.entity,s=t.states[e.entity],r=t.states[e.description_entity],n=t.states[e.description_max_entity],o=t.entities[a];let l="";if(o&&o.area_id){const e=t.areas[o.area_id];l=e?e.name:""}if(!l&&o&&o.device_id){const e=t.devices[o.device_id];if(e&&e.area_id){const i=t.areas[e.area_id];l=i?i.name:""}}if(!s||!r||!n)return i``;const c=parseFloat(s.state),d=parseFloat(r.state),h=parseFloat(n.state);let p=!1,m="#ff4444",_="rgba(255, 68, 68, 0.5)";return c<d?(p=!0,m="#ff4444"):c>h&&(p=!0,m="#44b4ff",_="rgba(68, 180, 255, 0.5)"),p?i`
-      <div class="chip" 
-           style="border-color: ${m}; --glow-color: ${_};" 
-           @click="${()=>this._handleMoreInfo()}">
-        <ha-icon icon="mdi:water-alert" style="color: ${m}"></ha-icon>
-        <span>${e.name||s.attributes.friendly_name} (${l})</span>
-      </div>
-    `:i``}_handleMoreInfo(){const e=new Event("hass-more-info",{bubbles:!0,composed:!0});e.detail={entityId:this.config.entity},this.dispatchEvent(e)}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:r[document.querySelector("home-assistant")?.hass?.language||"en"]?.card_description||r.en.card_description,preview:!0}),window.customBadges=window.customBadges||[],window.customBadges.push({type:"mk-plant-alert-chip",name:"MK Plant Alert Badge",description:r[document.querySelector("home-assistant")?.hass?.language||"en"]?.chip_description||r.en.chip_description,preview:!0});
+    `:i``}_valueChanged(e){const t=new CustomEvent("config-changed",{detail:{config:e.detail.value},bubbles:!0,composed:!0});this.dispatchEvent(t)}});customElements.define("mk-plant-alert-chip",class extends t{static get properties(){return{hass:{},config:{}}}static get styles(){return s}static getConfigElement(){return document.createElement("mk-plant-alert-chip-editor")}t(e){const t=this.hass&&this.hass.language?this.hass.language:"en";return r[t]&&r[t][e]||r.en[e]||e}setConfig(e){if(!e.entity||!e.description_entity||!e.description_max_entity)throw new Error(this.t("configure_all_sensors"));this.config=e}static getStubConfig(){return{name:"Roślina",entity:"",description_entity:"",description_max_entity:""}}render(){const{config:e,hass:t}=this;if(!t||!e)return i``;const a=e.entity,s=t.states[a],r=t.states[e.description_entity],n=t.states[e.description_max_entity];if(!s||!r||!n)return i`
+                <div class="chip" style="border-style: dashed; opacity: 0.5;">
+                    <ha-icon icon="mdi:help-circle-outline"></ha-icon>
+                </div>`;const o=t.entities?t.entities[a]:null;let l="";if(o&&o.area_id){const e=t.areas[o.area_id];l=e?e.name:""}if(!l&&o&&o.device_id){const e=t.devices?t.devices[o.device_id]:null;if(e&&e.area_id){const i=t.areas[e.area_id];l=i?i.name:""}}const c=parseFloat(s.state),d=parseFloat(r.state),h=parseFloat(n.state);let p=!1,m="var(--secondary-text-color)",_="transparent",u="mdi:leaf";return c<d?(p=!0,m="#ff4444",_="rgba(255, 68, 68, 0.5)",u="mdi:water-alert"):c>h&&(p=!0,m="#44b4ff",_="rgba(68, 180, 255, 0.5)",u="mdi:water-percent-alert"),i`
+          <div class="chip" 
+               style="border-color: ${p?m:"transparent"}; 
+                      --glow-color: ${_}; 
+                      background: ${p?"var(--card-background-color)":"transparent"};
+                      animation: ${p?"pulse 2s infinite":"none"};" 
+               @click="${()=>this._handleMoreInfo()}">
+            
+            <ha-icon icon="${u}" style="color: ${m}"></ha-icon>
+            
+            ${p?i`
+                <span>${e.name||s.attributes.friendly_name} ${l?`(${l})`:""}</span>
+            `:""}
+          </div>
+        `}_handleMoreInfo(){const e=new Event("hass-more-info",{bubbles:!0,composed:!0});e.detail={entityId:this.config.entity},this.dispatchEvent(e)}}),window.customCards=window.customCards||[],window.customCards.push({type:"mk-plant-card",name:"MK Plant Card",description:r[document.querySelector("home-assistant")?.hass?.language||"en"]?.card_description||r.en.card_description,preview:!0}),window.customBadges=window.customBadges||[],window.customBadges.push({type:"mk-plant-alert-chip",name:"MK Plant Alert Badge",description:r[document.querySelector("home-assistant")?.hass?.language||"en"]?.chip_description||r.en.chip_description,preview:!0});

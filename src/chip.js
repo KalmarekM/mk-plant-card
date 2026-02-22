@@ -3,7 +3,6 @@ import { chipStyles } from './styles.js';
 import { translations } from './translations.js';
 import './chip-editor.js';
 
-
 export class MkPlantAlertChip extends LitElement {
 
     static get properties() {
@@ -19,7 +18,6 @@ export class MkPlantAlertChip extends LitElement {
     }
 
     t(key) {
-        // Sprawdzamy, czy this.hass w ogóle istnieje
         const lang = (this.hass && this.hass.language) ? this.hass.language : 'en';
         return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
     }
@@ -42,59 +40,73 @@ export class MkPlantAlertChip extends LitElement {
 
     render() {
         const { config, hass } = this;
-        if (!hass || !config) {
-            return html``;
-        }
-         const entityId = config.entity;
-        const state = hass.states[config.entity];
+        if (!hass || !config) return html``;
+
+        const entityId = config.entity;
+        const state = hass.states[entityId];
         const descMinState = hass.states[config.description_entity];
         const descMaxState = hass.states[config.description_max_entity];
 
-        const entityRegistry = hass.entities[entityId];
-        let areaName = "";
+        // Guard dla brakujących encji
+        if (!state || !descMinState || !descMaxState) {
+            return html`
+                <div class="chip" style="border-style: dashed; opacity: 0.5;">
+                    <ha-icon icon="mdi:help-circle-outline"></ha-icon>
+                </div>`;
+        }
 
+        // Logika obszaru
+        const entityRegistry = hass.entities ? hass.entities[entityId] : null;
+        let areaName = "";
         if (entityRegistry && entityRegistry.area_id) {
             const area = hass.areas[entityRegistry.area_id];
             areaName = area ? area.name : "";
         }
-
         if (!areaName && entityRegistry && entityRegistry.device_id) {
-            const device = hass.devices[entityRegistry.device_id];
+            const device = hass.devices ? hass.devices[entityRegistry.device_id] : null;
             if (device && device.area_id) {
                 const area = hass.areas[device.area_id];
                 areaName = area ? area.name : "";
             }
         }
 
-        if (!state || !descMinState || !descMaxState) return html``;
-
         const currentV = parseFloat(state.state);
         const minV = parseFloat(descMinState.state);
         const maxV = parseFloat(descMaxState.state);
 
         let isAlert = false;
-        let iconColor = "#ff4444";
-        let glowColor = "rgba(255, 68, 68, 0.5)";
+        let iconColor = "var(--secondary-text-color)"; // Kolor domyślny (brak alarmu)
+        let glowColor = "transparent";
+        let icon = "mdi:leaf"; // Ikona domyślna
 
         if (currentV < minV) {
             isAlert = true;
             iconColor = "#ff4444";
+            glowColor = "rgba(255, 68, 68, 0.5)";
+            icon = "mdi:water-alert";
         } else if (currentV > maxV) {
             isAlert = true;
             iconColor = "#44b4ff";
             glowColor = "rgba(68, 180, 255, 0.5)";
+            icon = "mdi:water-percent-alert";
         }
 
-        if (!isAlert) return html``;
-
+        // Renderowanie - zawsze zwracamy kontener .chip, żeby był edytowalny
         return html`
-      <div class="chip" 
-           style="border-color: ${iconColor}; --glow-color: ${glowColor};" 
-           @click="${() => this._handleMoreInfo()}">
-        <ha-icon icon="mdi:water-alert" style="color: ${iconColor}"></ha-icon>
-        <span>${config.name || state.attributes.friendly_name} (${areaName})</span>
-      </div>
-    `;
+          <div class="chip" 
+               style="border-color: ${isAlert ? iconColor : 'transparent'}; 
+                      --glow-color: ${glowColor}; 
+                      background: ${isAlert ? 'var(--card-background-color)' : 'transparent'};
+                      animation: ${isAlert ? 'pulse 2s infinite' : 'none'};" 
+               @click="${() => this._handleMoreInfo()}">
+            
+            <ha-icon icon="${icon}" style="color: ${iconColor}"></ha-icon>
+            
+            ${isAlert ? html`
+                <span>${config.name || state.attributes.friendly_name} ${areaName ? `(${areaName})` : ''}</span>
+            ` : ''}
+          </div>
+        `;
     }
 
     _handleMoreInfo() {
@@ -102,6 +114,5 @@ export class MkPlantAlertChip extends LitElement {
         e.detail = { entityId: this.config.entity };
         this.dispatchEvent(e);
     }
-
 }
 customElements.define("mk-plant-alert-chip", MkPlantAlertChip);
