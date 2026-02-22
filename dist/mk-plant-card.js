@@ -151,12 +151,14 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
               class="scroll-top-icon"
               @click="${()=>this._scrollToTop()}">
             </ha-icon>
-                      <ha-icon 
-            icon="${this._showDetails?"mdi:information":"mdi:information-outline"}" 
-            class="info-icon"
-            style="color: ${this._showDetails?"green":"grey"}"
-            @click="${()=>this._toggleDetails()}">
-          </ha-icon>        
+            
+            <ha-icon 
+              icon="${this._showDetails?"mdi:information":"mdi:information-outline"}" 
+              class="info-icon"
+              style="color: ${this._showDetails?"green":"grey"}"
+              @click="${()=>this._toggleDetails()}">
+            </ha-icon>        
+          </div>
         </div>
         
         <div class="main-container">
@@ -165,6 +167,7 @@ import{css as e,LitElement as t,html as i}from"https://unpkg.com/lit-element@2.4
           </div>
 
           <div class="data-col">
+            
             ${this._showDetails?i`
               <div class="details-section">
                 <hr>

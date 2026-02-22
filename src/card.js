@@ -86,12 +86,14 @@ class MkPlantCard extends LitElement {
               class="scroll-top-icon"
               @click="${() => this._scrollToTop()}">
             </ha-icon>
-                      <ha-icon 
-            icon="${this._showDetails ? 'mdi:information' : 'mdi:information-outline'}" 
-            class="info-icon"
-            style="color: ${this._showDetails ? 'green' : 'grey'}"
-            @click="${() => this._toggleDetails()}">
-          </ha-icon>        
+            
+            <ha-icon 
+              icon="${this._showDetails ? 'mdi:information' : 'mdi:information-outline'}" 
+              class="info-icon"
+              style="color: ${this._showDetails ? 'green' : 'grey'}"
+              @click="${() => this._toggleDetails()}">
+            </ha-icon>        
+          </div>
         </div>
         
         <div class="main-container">
@@ -100,6 +102,7 @@ class MkPlantCard extends LitElement {
           </div>
 
           <div class="data-col">
+            
             ${this._showDetails ? html`
               <div class="details-section">
                 <hr>
@@ -108,7 +111,7 @@ class MkPlantCard extends LitElement {
                 </ha-markdown>
               </div>
               ` : ''
-      }
+            }
             
             <div class="param-row">
               <ha-icon icon="${mIcon}" style="color: ${mColor}"></ha-icon>
