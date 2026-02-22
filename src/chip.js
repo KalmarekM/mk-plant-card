@@ -107,7 +107,6 @@ export class MkPlantAlertChip extends LitElement {
     }
 
     _handleScrollToCard(ev) {
-        // 1. ZATRZYMUJEMY standardową akcję Home Assistant
         if (ev) {
             ev.preventDefault();
             ev.stopPropagation();
@@ -115,39 +114,51 @@ export class MkPlantAlertChip extends LitElement {
 
         const moistureEntity = this.config.entity;
 
-        // Przebijamy się do widoku (Lovelace View)
-        const root = document.querySelector("home-assistant")
-            ?.shadowRoot?.querySelector("home-assistant-main")
-            ?.shadowRoot?.querySelector("ha-drawer")
-            ?.querySelector("partial-panel-resolver")
-            ?.querySelector("ha-panel-lovelace")
-            ?.shadowRoot?.querySelector("hui-view");
+        // Funkcja rekurencyjna do przeszukiwania Shadow DOM
+        const findComponentDeep = (root, tagName) => {
+            const found = [];
+            const search = (node) => {
+                if (!node) return;
+                // Sprawdź czy to nasz element
+                if (node.tagName && node.tagName.toLowerCase() === tagName) {
+                    found.push(node);
+                }
+                // Szukaj w dzieciach
+                if (node.children) {
+                    Array.from(node.children).forEach(search);
+                }
+                // PRZEBIJ SIĘ PRZEZ SHADOW ROOT
+                if (node.shadowRoot) {
+                    Array.from(node.shadowRoot.children).forEach(search);
+                }
+            };
+            search(root);
+            return found;
+        };
 
-        if (!root) {
-            this._fallbackMoreInfo();
-            return;
-        }
+        // Szukamy w całym dokumencie, zaczynając od samej góry
+        const allPlantCards = findComponentDeep(document.querySelector("home-assistant"), "mk-plant-card");
 
-        // Szukamy karty - upewnij się, że mk-plant-card jest poprawnie zarejestrowany
-        const allCards = Array.from(root.querySelectorAll("mk-plant-card"));
-        const targetCard = allCards.find(card =>
+        // Znajdź kartę z pasującym sensorem
+        const targetCard = allPlantCards.find(card =>
             card.config && card.config.moisture_sensor === moistureEntity
         );
 
         if (targetCard) {
             targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
 
-            // Wizualny highlight
-            targetCard.style.transition = "box-shadow 0.5s ease-in-out, transform 0.5s ease-in-out";
-            targetCard.style.boxShadow = "0 0 20px var(--accent-color)";
-            targetCard.style.transform = "scale(1.02)";
+            // Highlight (opcjonalny, ale pro)
+            targetCard.style.transition = "box-shadow 0.5s ease-in-out, transform 0.3s ease";
+            targetCard.style.boxShadow = "0 0 30px var(--accent-color)";
+            targetCard.style.transform = "scale(1.03)";
+            targetCard.style.zIndex = "999"; // Wyciągnij ją na wierzch
 
             setTimeout(() => {
                 targetCard.style.boxShadow = "none";
                 targetCard.style.transform = "scale(1)";
             }, 2000);
         } else {
-            // Jeśli nie znaleziono karty na tym widoku, pozwól otworzyć historię
+            console.warn("Gloria: Nie znalazłam karty dla encji:", moistureEntity);
             this._fallbackMoreInfo();
         }
     }
