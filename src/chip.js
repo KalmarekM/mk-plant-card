@@ -13,7 +13,7 @@ export class MkPlantAlertChip extends LitElement {
         return chipStyles;
     }
 
-    static get getConfigElement() {
+    static getConfigElement() {
         return document.createElement("mk-plant-alert-chip-editor");
     }
 
