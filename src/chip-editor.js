@@ -1,6 +1,5 @@
 import { LitElement, html } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { translations } from './translations.js';
-// Importujemy chip.js, aby edytor mógł wyrenderować podgląd
 import './chip.js';
 
 export class MkPlantAlertChipEditor extends LitElement {
@@ -8,11 +7,10 @@ export class MkPlantAlertChipEditor extends LitElement {
         return { hass: {}, _config: {} };
     }
 
-t(key) {
-  // Sprawdzamy, czy this.hass w ogóle istnieje
-  const lang = (this.hass && this.hass.language) ? this.hass.language : 'en';
-  return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
-}
+    t(key) {
+        const lang = (this.hass && this.hass.language) ? this.hass.language : 'en';
+        return (translations[lang] && translations[lang][key]) || (translations['en'][key]) || key;
+    }
 
     setConfig(config) {
         this._config = config;
@@ -21,6 +19,11 @@ t(key) {
     _schema() {
         return [
             { name: "name", label: this.t('chip_label_name'), selector: { text: {} } },
+            {
+                name: "show_name",
+                label: this.t('chip_label_show_name'),
+                selector: { boolean: {} }
+            },
             {
                 name: "entity",
                 label: this.t('chip_label_moisture'),
@@ -43,28 +46,19 @@ t(key) {
         if (!this.hass || !this._config) return html``;
 
         return html`
-      <div class="card-config">
-        <ha-form
-          .hass=${this.hass}
-          .data=${this._config}
-          .schema=${this._schema()}
-          .computeLabel=${(s) => s.label}
-          @value-changed=${this._valueChanged}
-        ></ha-form>
-
-        <div class="preview-section">
-          <p class="preview-label">${this.t('preview_title')}</p>
-          <mk-plant-alert-chip
-            .hass=${this.hass}
-            .config=${this._config}
-          ></mk-plant-alert-chip>
-        </div>
-      </div>
-    `;
+            <div class="card-config">
+                <ha-form
+                    .hass=${this.hass}
+                    .data=${this._config}
+                    .schema=${this._schema()}
+                    .computeLabel=${(s) => s.label}
+                    @value-changed=${this._valueChanged}
+                ></ha-form>
+            </div>
+        `;
     }
 
     _valueChanged(ev) {
-        // Standardowe wysłanie nowej konfiguracji do Home Assistant
         const event = new CustomEvent("config-changed", {
             detail: { config: ev.detail.value },
             bubbles: true,

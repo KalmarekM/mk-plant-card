@@ -13,7 +13,7 @@ export class MkPlantAlertChip extends LitElement {
         return chipStyles;
     }
 
-    static getConfigElement() {
+    static get getConfigElement() {
         return document.createElement("mk-plant-alert-chip-editor");
     }
 
@@ -32,6 +32,7 @@ export class MkPlantAlertChip extends LitElement {
     static getStubConfig() {
         return {
             name: "Roślina",
+            show_name: false,
             entity: "",
             description_entity: "",
             description_max_entity: ""
@@ -47,6 +48,7 @@ export class MkPlantAlertChip extends LitElement {
         const descMinState = hass.states[config.description_entity];
         const descMaxState = hass.states[config.description_max_entity];
 
+        // Renderowanie stanu błędu/braku konfiguracji
         if (!state || !descMinState || !descMaxState) {
             return html`
                 <div class="chip" style="border-style: dashed; opacity: 0.5;">
@@ -54,6 +56,7 @@ export class MkPlantAlertChip extends LitElement {
                 </div>`;
         }
 
+        // Pobieranie nazwy obszaru (Area) z rejestru encji lub urządzenia
         const entityRegistry = hass.entities ? hass.entities[entityId] : null;
         let areaName = "";
         if (entityRegistry && entityRegistry.area_id) {
@@ -77,6 +80,7 @@ export class MkPlantAlertChip extends LitElement {
         let glowColor = "transparent";
         let icon = "mdi:leaf"; // Ikona domyślna
 
+        // Logika sprawdzania progów wilgotności
         if (currentV < minV) {
             isAlert = true;
             iconColor = "#ff4444";
@@ -89,18 +93,19 @@ export class MkPlantAlertChip extends LitElement {
             icon = "mdi:water-percent-alert";
         }
 
+        // Decyzja o wyświetlaniu tekstu: jeśli jest alarm LUB użytkownik wymusił widoczność nazwy
+        const shouldShowText = isAlert || config.show_name;
+
         // Renderowanie - zawsze zwracamy kontener .chip, żeby był edytowalny
         return html`
             <div class="chip" 
-                style="..." 
+                style="--glow-color: ${glowColor};" 
                 @click="${(ev) => this._handleScrollToCard(ev)}">
-
-            <ha-icon icon="${icon}" style="color: ${iconColor}"></ha-icon>
-            
-            ${isAlert ? html`
-                <span>${config.name || state.attributes.friendly_name} ${areaName ? `(${areaName})` : ''}</span>
-            ` : ''}
-          </div>
+                <ha-icon icon="${icon}" style="color: ${iconColor}"></ha-icon>
+                ${shouldShowText ? html`
+                    <span>${config.name || state.attributes.friendly_name} ${areaName ? `(${areaName})` : ''}</span>
+                ` : ''}
+            </div>
         `;
     }
 
@@ -145,7 +150,7 @@ export class MkPlantAlertChip extends LitElement {
         if (targetCard) {
             targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
 
-            // Highlight (opcjonalny, ale pro)
+            // Highlight (opcjonalny efekt wizualny po przewinięciu)
             targetCard.style.transition = "box-shadow 0.5s ease-in-out, transform 0.3s ease";
             targetCard.style.boxShadow = "0 0 30px var(--accent-color)";
             targetCard.style.transform = "scale(1.03)";
@@ -160,6 +165,7 @@ export class MkPlantAlertChip extends LitElement {
             this._fallbackMoreInfo();
         }
     }
+
     _fallbackMoreInfo() {
         const e = new Event("hass-more-info", { bubbles: true, composed: true });
         e.detail = { entityId: this.config.entity };
