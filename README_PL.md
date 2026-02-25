@@ -1,6 +1,6 @@
 # MK Plant Card & Alert Chip (Wersja Beta) 🌿
 
-Witaj w systemie MK Plant Card! To proste, a zarazem potężne narzędzie, dzięki któremu Twoja domowa dżungla w Home Assistant będzie zawsze szczęśliwa i odpowiednio nawodniona.
+MK Plant Card to zestaw kart do Home Assistant, służących do monitorowania podstawowych i niezbędnych parametrów roślin. Skupia się na czytelnej prezentacji danych i szybkich powiadomieniach o zapotrzebowaniu na wodę.
 
 ## Co jest w środku?
 - Inteligentna Karta Rośliny: Estetyczna karta wyświetlająca zdjęcie Twojej rośliny, dane o jej stanie (wilgotność gleby, temperatura, wilgotność powietrza) oraz przycisk szybkiego zapisu nawożenia.
@@ -9,11 +9,23 @@ Witaj w systemie MK Plant Card! To proste, a zarazem potężne narzędzie, dzię
 
 ## Jak zacząć?
 Aby korzystać z systemu, musisz przygotować następujące dane:
-1. Zdjęcie swojej rośliny (link lub lokalny plik).
+1. Zdjęcie swojej rośliny (link lub lokalny plik)– zobacz: [Gdzie i jak umieścić zdjęcie rośliny?](#gdzie-i-jak-umieścić-zdjęcie-rośliny).
 2. Czujniki: wilgotności gleby, temperatury, wilgotności powietrza oraz czujnik poziomu baterii.
 3. Nazwę rośliny oraz jej lokalizację (obszar) przypisaną w Home Assistant.
 4. Encje progów (min/max): Są one pobierane bezpośrednio z integracji Plant Monitor.
 
+## Gdzie i jak umieścić zdjęcie rośliny?
+
+Aby obrazek był widoczny na karcie, musisz go umieścić w zasobach lokalnych serwera:
+
+1. **Folder fizyczny:** Pliki zdjęć wgraj do katalogu:  
+   `\\x.x.x.x\config\www\images\plants\`
+   
+   *Wskazówka: Możesz również skorzystać ze zdjęć roślin utworzonych w tym katalogu automatycznie przez integrację **Plant Monitor**.*
+2. **Adres URL:** Home Assistant mapuje folder `/www/` jako `/local/`. Twoje zdjęcia będą widoczne pod adresem:  
+   `/local/images/plants/nazwa_pliku.jpg`
+3. **Konfiguracja:** W ustawieniach karty, w polu **image**, wpisz powyższą ścieżkę (pamiętaj o zachowaniu wielkości liter w nazwie pliku).
+4. 
 ## Tworzenie opisu rośliny
 Aby na karcie wyświetlała się instrukcja pielęgnacji, należy stworzyć sensor typu template. 
 
