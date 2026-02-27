@@ -40,7 +40,10 @@ export const translations = {
     'chip_description': 'Mały alert (chip) - widoczny tylko gdy roślina wymaga podlewania',
     'error_missing_name': 'Błąd: Nazwa rośliny jest wymagana!',
     'error_missing_sensors': 'Skonfiguruj wszystkie sensory (Wilgotność, Próg Min, Próg Max)',
-    
+    'no_fertilize': "Nie nawozić",
+    'limit_fertilize': "Ogranicz nawożenie",
+    'winter_break': "Przerwa zimowa",
+
     // Edytor Chipa
     'chip_label_name': 'Etykieta (opcjonalnie)',
     'chip_label_moisture': 'Sensor wilgotności gleby',
@@ -79,6 +82,9 @@ export const translations = {
     'chip_description': 'Small alert chip - visible only when watering is needed',
     'error_missing_sensors': 'Please configure all sensors (Moisture, Min Threshold, Max Threshold)',
     'error_missing_name': 'Error: Plant name is required!',
+    'no_fertilize': "Do not fertilize",
+    'limit_fertilize': "Limit fertilization",
+    'winter_break': "Winter break",
     'chip_label_name': 'Label (optional)',
     'chip_label_moisture': 'Soil moisture sensor',
     'chip_label_desc_min': 'MIN threshold sensor (min attr)',

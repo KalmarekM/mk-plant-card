@@ -71,17 +71,37 @@ class MkPlantCard extends LitElement {
 
     const sunIcon = config.sun_exposure || "🌑";
 
-    // --- LOGIKA ALARMU NAWOŻENIA ---
+    // --- LOGIKA SEZONOWA I ALARMU NAWOŻENIA ---
     const lastFertState = config.fertilize_helper ? hass.states[config.fertilize_helper]?.state : null;
-    let fertilizeAlert = false;
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1; // 1-12
     
-    if (lastFertState && lastFertState !== 'unknown' && lastFertState !== 'unavailable') {
+    // Pory roku
+    const isWinter = [12, 1, 2].includes(currentMonth);
+    const isAutumn = [9, 10, 11].includes(currentMonth);
+    
+    let fertilizeAlert = false;
+    let buttonLabel = html`${this.t('save_fertilize')}`;
+    let buttonSubText = `${this.t('last_time')}: ${this._getState(config.fertilize_helper)}`;
+    let btnColorOverride = "";
+
+    if (isWinter) {
+        // ZIMA: Czerwony krzyżyk, tekst "Nie nawozić", szary przycisk
+        buttonLabel = html`<span style="color: #ff4444; font-weight: bold;">✖</span> ${this.t('no_fertilize')}`;
+        buttonSubText = this.t('winter_break');
+        btnColorOverride = "#555555";
+    } else if (isAutumn) {
+        // JESIEŃ: Pomarańczowy przycisk, sugestia ograniczenia
+        buttonLabel = this.t('limit_fertilize');
+        btnColorOverride = "#d35400"; // Pomarańczowy (ciemny)
+    } else if (lastFertState && lastFertState !== 'unknown' && lastFertState !== 'unavailable') {
+        // WIOSNA/LATO: Standardowa logika interwału
         const lastDate = new Date(lastFertState);
-        const today = new Date();
-        const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
-        const intervalWeeks = config.fertilize_interval || 2; // Domyślnie 2 tygodnie
+        const diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+        const intervalWeeks = config.fertilize_interval || 2;
         if (diffDays > (intervalWeeks * 7)) {
             fertilizeAlert = true;
+            btnColorOverride = "#ff4444"; // Czerwony alert
         }
     }
 
@@ -151,12 +171,12 @@ class MkPlantCard extends LitElement {
             </div>
 
             <div class="fertilize-btn" 
-                 style="margin-top: 10px; background-color: ${fertilizeAlert ? '#ff4444' : ''};" 
+                 style="margin-top: 10px; background-color: ${btnColorOverride};" 
                  @click="${() => this._callScript(config.fertilize_helper)}">
-              <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
+              <ha-icon icon="${isWinter ? 'mdi:leaf-off' : 'mdi:sprinkler-variant'}"></ha-icon>
               <div class="btn-text">
-                <span class="btn-primary">${this.t('save_fertilize')}</span>
-                <span class="btn-secondary">${this.t('last_time')}: ${this._getState(config.fertilize_helper)}</span>
+                <span class="btn-primary">${buttonLabel}</span>
+                <span class="btn-secondary">${buttonSubText}</span>
               </div>
             </div>
           </div>
