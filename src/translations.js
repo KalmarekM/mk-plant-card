@@ -19,7 +19,8 @@ export const translations = {
     'min_prefix': 'Min.',
     'max_prefix': 'Max.',
     'range': 'Zakres',
-    
+    'fert_interval': 'Interwał nawożenia (tygodnie)',
+
     // Pomocnicy i akcje
     'desc_sensor': 'Sensor opisu (atrybut: instrukcja)',
     'fert_helper': 'Pomocnik daty nawożenia',
@@ -63,6 +64,7 @@ export const translations = {
     'min_prefix': 'Min.',
     'max_prefix': 'Max.',
     'range': 'Range',
+    'fert_interval': 'Fertilization interval (weeks)',
     'desc_sensor': 'Description sensor (attr: instruction)',
     'fert_helper': 'Fertilization date helper',
     'save_fertilize': 'Save fertilization',

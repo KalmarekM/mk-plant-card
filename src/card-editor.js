@@ -69,6 +69,7 @@ class MkPlantCardEditor extends LitElement {
     return [
       { name: "description_sensor", label: this.t('desc_sensor'), selector: { entity: { domain: "sensor" } } },
       { name: "fertilize_helper", label: this.t('fert_helper'), selector: { entity: { domain: "input_datetime" } } },
+      { name: "fertilize_interval", label: this.t('fert_interval'), selector: { number: { min: 1, max: 52, mode: "box", unit_of_measurement: "weeks" } } },
     ];
   }
 

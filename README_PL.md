@@ -50,8 +50,11 @@ Krok 3: W pliku description_of_plants.yaml dodaj opis swojej rośliny według wz
           * **Podłoże**: Preferuje ziemię żyzną, próchniczą i dobrze przepuszczalną.
           * **Nawożenie**: Wymaga regularnego zasilania raz na dwa tygodnie w okresie wzrostu.
 ```
-## Pomocnik daty nawożenia
-Wygodną funkcją karty jest zapisywanie ostatniej daty nawożenia. Nie musisz szukać ustawień w panelu Home Assistant – możesz utworzyć ten element bezpośrednio podczas edycji karty (w polu Helper), co pozwoli na szybkie odnotowanie wykonanej pielęgnacji.
+## Pomocnik nawożenia
+Karta pozwala nie tylko zapisywać datę ostatniego nawożenia, ale również o nim przypominać. 
+1. **Zapisywanie**: Możesz utworzyć pomocnika (`input_datetime`) bezpośrednio w edytorze karty. 
+2. **Interwał**: Ustaw co ile tygodni roślina powinna być nawożona.
+3. **Inteligentne przypomnienie**: Jeśli od ostatniego nawożenia minie więcej czasu niż ustawiony interwał, przycisk "Zapisz nawożenie" zmieni kolor na czerwony, sygnalizując konieczność pielęgnacji.
 
 ## Integracja Plant Monitor
 Karta jest wspierana przez integrację Plant Monitor. Dostarcza niezbędne wartości progowe min/max dla Twoich czujników.

@@ -71,6 +71,20 @@ class MkPlantCard extends LitElement {
 
     const sunIcon = config.sun_exposure || "🌑";
 
+    // --- LOGIKA ALARMU NAWOŻENIA ---
+    const lastFertState = config.fertilize_helper ? hass.states[config.fertilize_helper]?.state : null;
+    let fertilizeAlert = false;
+    
+    if (lastFertState && lastFertState !== 'unknown' && lastFertState !== 'unavailable') {
+        const lastDate = new Date(lastFertState);
+        const today = new Date();
+        const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+        const intervalWeeks = config.fertilize_interval || 2; // Domyślnie 2 tygodnie
+        if (diffDays > (intervalWeeks * 7)) {
+            fertilizeAlert = true;
+        }
+    }
+
     return html`
       <ha-card>
         <div class="header">
@@ -136,7 +150,9 @@ class MkPlantCard extends LitElement {
               <div class="range">${this.t('range')}: ${minH} - ${maxH}%</div>
             </div>
 
-            <div class="fertilize-btn" style="margin-top: 10px;" @click="${() => this._callScript(config.fertilize_helper)}">
+            <div class="fertilize-btn" 
+                 style="margin-top: 10px; background-color: ${fertilizeAlert ? '#ff4444' : ''};" 
+                 @click="${() => this._callScript(config.fertilize_helper)}">
               <ha-icon icon="mdi:sprinkler-variant"></ha-icon>
               <div class="btn-text">
                 <span class="btn-primary">${this.t('save_fertilize')}</span>
@@ -189,4 +205,3 @@ window.customCards.push({
   description: translations[document.querySelector('home-assistant')?.hass?.language || 'en']?.card_description || translations['en'].card_description,
   preview: true
 });
-

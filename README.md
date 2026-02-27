@@ -50,7 +50,10 @@ To display care instructions on the card, you need to create a template sensor.
           * **Fertilization**: Requires regular feeding every two weeks during the growing season.
 ```
 ## Fertilization Helper
-The card features a convenient way to track the last fertilization date. You don't have to look for settings in the Home Assistant panel – you can create this helper directly while editing the card (in the **Helper** field), allowing you to quickly log your plant care.
+The card not only tracks the last fertilization date but also acts as a reminder.
+1. **Tracking**: You can create a helper (`input_datetime`) directly in the card editor.
+2. **Interval**: Set how many weeks should pass between fertilizations.
+3. **Smart Reminder**: If the time since the last fertilization exceeds the set interval, the "Save Fertilize" button will turn red, signaling that the plant needs attention.
 
 ## Plant Monitor Integration
 This card is supported by the **Plant Monitor** integration, which provides the necessary min/max threshold values for your sensors.
