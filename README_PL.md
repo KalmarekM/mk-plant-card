@@ -51,10 +51,15 @@ Krok 3: W pliku description_of_plants.yaml dodaj opis swojej rośliny według wz
           * **Nawożenie**: Wymaga regularnego zasilania raz na dwa tygodnie w okresie wzrostu.
 ```
 ## Pomocnik nawożenia
-Karta pozwala nie tylko zapisywać datę ostatniego nawożenia, ale również o nim przypominać. 
+Karta pozwala nie tylko zapisywać datę ostatniego nawożenia, ale również o nim przypominać, uwzględniając cykl pór roku.
+
 1. **Zapisywanie**: Możesz utworzyć pomocnika (`input_datetime`) bezpośrednio w edytorze karty. 
 2. **Interwał**: Ustaw co ile tygodni roślina powinna być nawożona.
-3. **Inteligentne przypomnienie**: Jeśli od ostatniego nawożenia minie więcej czasu niż ustawiony interwał, przycisk "Zapisz nawożenie" zmieni kolor na czerwony, sygnalizując konieczność pielęgnacji.
+3. **Inteligentne przypomnienie**: Jeśli od ostatniego nawożenia minie więcej czasu niż ustawiony interwał, przycisk "Zapisz nawożenie" zmieni kolor na czerwony.
+4. **Logika sezonowa**: 
+   - **Zima (XII-II)**: Przycisk wyświetla czerwony znak `✖ Nie nawozić` (przerwa spoczynkowa).
+   - **Jesień (IX-XI)**: Karta sugeruje ograniczenie nawożenia, zmieniając kolor przycisku na pomarańczowy.
+   - *Przycisk zawsze pozostaje aktywny, umożliwiając zapis mimo ostrzeżeń.*
 
 ## Integracja Plant Monitor
 Karta jest wspierana przez integrację Plant Monitor. Dostarcza niezbędne wartości progowe min/max dla Twoich czujników.

@@ -50,10 +50,15 @@ To display care instructions on the card, you need to create a template sensor.
           * **Fertilization**: Requires regular feeding every two weeks during the growing season.
 ```
 ## Fertilization Helper
-The card not only tracks the last fertilization date but also acts as a reminder.
-1. **Tracking**: You can create a helper (`input_datetime`) directly in the card editor.
+The card not only tracks the last fertilization date but also acts as a smart reminder, taking seasonal cycles into account.
+
+1. **Tracking**: Create a helper (`input_datetime`) directly in the card editor. 
 2. **Interval**: Set how many weeks should pass between fertilizations.
-3. **Smart Reminder**: If the time since the last fertilization exceeds the set interval, the "Save Fertilize" button will turn red, signaling that the plant needs attention.
+3. **Smart Reminder**: If the time since the last fertilization exceeds the set interval, the button turns red.
+4. **Seasonal Logic**: 
+   - **Winter (Dec-Feb)**: The button displays a red `✖ Do not fertilize` mark (dormancy period).
+   - **Autumn (Sep-Nov)**: The card suggests limiting fertilization by changing the button color to orange.
+   - *The button remains active at all times, allowing you to log actions despite warnings.*
 
 ## Plant Monitor Integration
 This card is supported by the **Plant Monitor** integration, which provides the necessary min/max threshold values for your sensors.
